@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("")
 
-public class SharetoolsController {
+public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "index"; // maps to templates/index.html
+    }
+
+    @GetMapping("/register")
+    public String showToolRegistrationForm() {
+        return "register"; // maps to templates/register.html
     }
 }
