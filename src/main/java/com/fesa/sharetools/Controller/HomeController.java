@@ -11,11 +11,17 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "index"; // maps to templates/index.html
+        return "index";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @GetMapping("/register")
-    public String showToolRegistrationForm() {
-        return "register"; // maps to templates/register.html
+    public String register() {
+        return "register";
     }
+
 }

@@ -1,53 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>ShareTools</title>
+    <title>ShareTools - Compartilhe suas ferramentas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .navbar-links a:hover {
+            color: #1abc9c;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .auth-buttons button {
+            background-color: transparent;
+            border: 1px solid #fff;
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .auth-buttons button:hover {
+            background-color: #1abc9c;
+            border-color: #1abc9c;
+            color: white;
+        }
+
+        .auth-buttons .register {
+            background-color: #1abc9c;
+            border-color: #1abc9c;
+        }
+
+        .auth-buttons .register:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #1abc9c;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(to right, #1abc9c, #16a085);
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .hero button {
+            background-color: #ffffff;
+            color: #16a085;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .hero button:hover {
+            background-color: #ecf0f1;
+        }
+
+        .section {
+            padding: 60px 20px;
             text-align: center;
         }
 
-        .navbar {
-            background-color: #333;
-            overflow: hidden;
-            padding: 10px 0;
-        }
-
-        .navbar button {
-            background-color: #555;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 0 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .navbar button:hover {
-            background-color: #777;
-        }
-
-        .content {
-            padding: 50px;
+        .section h2 {
             font-size: 32px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .feature {
+            max-width: 250px;
+        }
+
+        .material-symbols-outlined {
+            font-size: 48px;
+            color: #16a085;
+            margin-bottom: 10px;
+        }
+
+        .cta {
+            background-color: #2c3e50;
+            color: white;
+            padding: 60px 20px;
+        }
+
+        .cta button {
+            margin-top: 20px;
+            background-color: #1abc9c;
+            color: white;
+            padding: 14px 32px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .cta button:hover {
+            background-color: #16a085;
+        }
+
+        footer {
+            background-color: #222;
+            color: #bbb;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <button onclick="window.location.href='/'">Home</button>
-    <button>About</button>
-    <button>Contact</button>
-    <button onclick="window.location.href='/register'">Register Tool</button>
-</div>
+<header>
+    <div class="logo">
+        <span class="material-symbols-outlined" style="vertical-align: middle;">construction</span>
+        <span style="margin-left: 8px;">ShareTools</span>
+    </div>
+    <nav class="navbar-links">
+        <a href="#como-funciona">Como Funciona</a>
+        <a href="#beneficios">Benefícios</a>
+        <a href="#contato">Contato</a>
+    </nav>
+    <div class="auth-buttons">
+        <button onclick="window.location.href='/login'">Login</button>
+        <button class="register" onclick="window.location.href='/register'">Registrar</button>
+    </div>
+</header>
 
-<div class="content">
-    Welcome to ShareTools!
-</div>
+
+<section class="hero">
+    <h1>Compartilhe Ferramentas com Seus Vizinhos</h1>
+    <p>Economize dinheiro, reduza o desperdício e fortaleça sua comunidade.</p>
+    <button onclick="window.location.href='/register'">Comece Agora</button>
+</section>
+
+<section class="section">
+    <h2>Benefícios do ShareTools</h2>
+    <div class="features">
+        <div class="feature">
+            <span class="material-symbols-outlined">handshake</span>
+            <h3>Colaboração</h3>
+            <p>Conecte-se com vizinhos e promova o espírito de comunidade.</p>
+        </div>
+        <div class="feature">
+            <span class="material-symbols-outlined">eco</span>
+            <h3>Sustentabilidade</h3>
+            <p>Compartilhar ferramentas ajuda a reduzir o consumo e o lixo.</p>
+        </div>
+        <div class="feature">
+            <span class="material-symbols-outlined">attach_money</span>
+            <h3>Economia</h3>
+            <p>Evite gastar com ferramentas que você só usaria uma vez.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="como-funciona">
+    <h2>Como Funciona?</h2>
+    <p style="max-width: 600px; margin: auto;">
+        Cadastre-se na plataforma, registre suas ferramentas e veja o que outros vizinhos disponibilizaram. Solicite empréstimos ou compartilhe seus itens com segurança.
+    </p>
+</section>
+
+<section class="cta">
+    <h2>Pronto para começar?</h2>
+    <p>Leva menos de um minuto para se cadastrar. Participe dessa ideia!</p>
+    <button onclick="window.location.href='/register'">Quero Me Registrar</button>
+</section>
+
+<section class="section" id="contato" style="padding: 40px 20px; background-color: #f8f9fb;">
+    <h2 style="margin-bottom: 16px;">Contato</h2>
+    <p style="font-size: 16px; color: #555;">Tem dúvidas ou precisa de ajuda? Fale com a gente:</p>
+    <div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 16px;">
+            <span class="material-symbols-outlined" style="font-size: 20px; color: #16a085;">mail</span>
+            <a href="mailto:suporte@sharetools.cefsa.br" style="color: #2c3e50; text-decoration: none;">
+                suporte@sharetools.cefsa.br
+            </a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 16px;">
+            <span class="material-symbols-outlined" style="font-size: 20px; color: #16a085;">call</span>
+            <a href="tel:+5511991234567" style="color: #2c3e50; text-decoration: none;">
+                (11) 99123-4567
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+<footer>
+    © 2025 ShareTools. Todos os direitos reservados.
+</footer>
 
 </body>
 </html>
