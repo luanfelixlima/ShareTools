@@ -4,25 +4,28 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "NAME")
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
+    @Column(name = "PHONE")
     private String phone;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Tool> tools;
+
 
     // Getters e Setters
     public Long getId() { return id; }

@@ -2,14 +2,31 @@ package com.fesa.sharetools.Controller;
 
 import com.fesa.sharetools.Model.User;
 import com.fesa.sharetools.Service.UserService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/users")
-public class UserController extends BaseController<User, Long> {
+public class UserController {
 
-    public UserController(UserService service) {
-        super(service);
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("user") User user) {
+        userService.save(user);
+        return "redirect:/login";
     }
 }
+
+
