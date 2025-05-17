@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login - ShareTools</title>
@@ -130,6 +130,12 @@
         <input type="password" id="password" name="password" required>
 
         <button type="submit">Login</button>
+
+        <!-- Exibe mensagem de erro quando login falhar -->
+        <div th:if="${param.error}" style="color: red; text-align: center; margin-bottom: 15px;">
+            Usuário ou senha inválidos.
+        </div>
+
     </form>
     <div class="register-link">
         Ainda não tem uma conta? <a href="/register">Cadastre-se</a>

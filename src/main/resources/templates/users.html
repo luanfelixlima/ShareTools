@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Usuários - ShareTools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo span {
+            margin-left: 8px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background-color: #1abc9c;
+            color: white;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .actions button {
+            padding: 6px 12px;
+            margin: 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span>Admin - ShareTools</span>
+    </div>
+</header>
+
+<main>
+    <h2>Gestão de Usuários</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Cargo (Role)</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Exemplo de preenchimento estático. Substitua por loop no backend -->
+        <tr>
+            <td>1</td>
+            <td>João da Silva</td>
+            <td>joao@email.com</td>
+            <td>(11) 99999-9999</td>
+            <td>Admin</td>
+            <td class="actions">
+                <button class="edit-btn">Editar</button>
+                <button class="delete-btn">Excluir</button>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Maria Souza</td>
+            <td>maria@email.com</td>
+            <td>(11) 98888-8888</td>
+            <td>Usuário</td>
+            <td class="actions">
+                <button class="edit-btn">Editar</button>
+                <button class="delete-btn">Excluir</button>
+            </td>
+        </tr>
+        <!-- Repita dinamicamente -->
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>
