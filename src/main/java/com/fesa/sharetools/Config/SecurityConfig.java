@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .logout(logout -> logout.permitAll());
 
         // Permite acessar o H2 Console
-        //http.headers(headers -> headers.frameOptions().disable());
+        http.headers(headers -> headers.frameOptions().disable());
         http.csrf(csrf -> csrf.disable());
 
         return http.build();

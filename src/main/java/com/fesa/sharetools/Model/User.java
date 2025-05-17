@@ -1,54 +1,52 @@
 package com.fesa.sharetools.Model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
 @Table(name = "USERS")
 public class User {
 
+    // Getters e Setters
+    @Setter
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
+    @ManyToOne
+    @JoinColumn(name = "ROLE_ID", nullable = false)
+    private Role role;
+
+    @Setter
+    @Getter
     @Column(name = "NAME")
     private String name;
 
+    @Setter
+    @Getter
     @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
 
+    @Getter
+    @Setter
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
+    @Setter
+    @Getter
     @Column(name = "PHONE")
     private String phone;
 
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Tool> tools;
 
 
-    // Getters e Setters
-    public Long getId() { return id; }
-
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
-
-    public String getPhone() { return phone; }
-
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public List<Tool> getTools() { return tools; }
-
-    public void setTools(List<Tool> tools) { this.tools = tools; }
 }
