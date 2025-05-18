@@ -3,52 +3,54 @@
 <head>
     <meta charset="UTF-8" />
     <title>Dashboard - ShareTools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Reset e base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
             background-color: #f4f6f8;
             color: #333;
-            padding: 0;
-            margin-top: 70px;
+            margin-top: 80px;
         }
 
         header {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            background-color: #3498db;
-            color: white;
-            padding: 15px 30px;
+            background-color: #4B1F81;
+            color: #ECF0F1;
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.8);
             z-index: 1000;
         }
 
         .nav-links a {
             margin-right: 20px;
-            color: white;
+            color: #ECF0F1;
             text-decoration: none;
             font-weight: bold;
-            transition: opacity 0.2s;
         }
 
         .nav-links a:hover {
-            opacity: 0.8;
+            color: #F1C40F;
         }
 
         .user-icon {
             position: relative;
             cursor: pointer;
+            font-weight: 600;
+        }
+
+        .user-icon span {
+            font-size: 16px;
         }
 
         .user-dropdown {
@@ -61,15 +63,8 @@
             padding: 10px;
             border-radius: 6px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            min-width: 120px;
-        }
-
-        .user-dropdown a {
-            display: block;
-            padding: 8px 12px;
-            color: #333;
-            text-decoration: none;
-            border-radius: 4px;
+            min-width: 150px;
+            text-align: left;
         }
 
         .user-dropdown a:hover {
@@ -88,14 +83,14 @@
 
         h1 {
             font-size: 2rem;
-            color: #2c3e50;
+            color: #4B1F81;
             margin-bottom: 25px;
         }
 
         h2 {
             margin-top: 40px;
             font-size: 1.5rem;
-            color: #34495e;
+            color: #5E2B97;
             border-bottom: 1px solid #ddd;
             padding-bottom: 8px;
         }
@@ -110,14 +105,14 @@
             padding: 12px 15px;
             margin-bottom: 8px;
             border-radius: 6px;
-            box-shadow: 0 2px 5px rgb(0 0 0 / 0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         form {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
 
@@ -125,35 +120,33 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
+            color: #5E2B97;
         }
 
         input[type="text"],
         textarea {
             width: 100%;
-            padding: 8px 12px;
+            padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #8E44AD;
+            border-radius: 6px;
+            font-size: 14px;
         }
 
         button {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
+            background-color: #4B1F81;
+            color: #ECF0F1;
+            padding: 12px 20px;
             border: none;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 1rem;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #2980b9;
-        }
-
-        /* Ícone de usuário (simples usando emoji) */
-        .user-icon span {
-            font-size: 1.5rem;
+            background-color: #F1C40F;
+            color: #4B1F81;
         }
     </style>
 </head>
@@ -167,7 +160,7 @@
     </div>
 
     <div class="user-icon">
-        <span>👤</span>
+        <span th:text="'👤 ' + ${#strings.arraySplit(user.name, ' ')[0]}">👤 Usuário</span>
         <div class="user-dropdown">
             <a href="/logout">Sair</a>
         </div>
@@ -205,5 +198,35 @@
     </form>
 </main>
 
+<script>
+    const userIcon = document.querySelector('.user-icon');
+    const dropdown = document.querySelector('.user-dropdown');
+    let hideTimeout;
+
+    userIcon.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+        dropdown.style.display = 'block';
+    });
+
+    userIcon.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => {
+            dropdown.style.display = 'none';
+        }, 1000); // 2 segundos
+    });
+
+    dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+        dropdown.style.display = 'block';
+    });
+
+    dropdown.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => {
+            dropdown.style.display = 'none';
+        }, 1000);
+    });
+</script>
+
+
 </body>
+
 </html>

@@ -9,18 +9,25 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #ECF0F1; /* Fundo branco acinzentado */
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
-            background-color: #2c3e50;
-            color: white;
+            background-color: #4B1F81; /* Roxo escuro forte */
+            color: #ECF0F1;
             padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
@@ -28,32 +35,36 @@
             align-items: center;
             font-size: 24px;
             font-weight: 600;
-            color: white;
+            color: #ECF0F1;
         }
 
         .navbar-links a {
-            color: white;
+            color: #ECF0F1;
             margin-left: 20px;
             text-decoration: none;
             font-size: 16px;
+            transition: color 0.3s;
         }
 
         .navbar-links a:hover {
-            color: #1abc9c;
+            color: #F1C40F; /* Amarelo suave no hover */
         }
 
         .container {
-            max-width: 420px;
+            max-width: 480px;
+            width: 90%;
             margin: 60px auto;
             background-color: #ffffff;
             padding: 35px;
             border-radius: 12px;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 12px rgba(75, 31, 129, 0.2); /* sombra roxa leve */
+            color: #5E2B97; /* Roxo profundo para textos */
+            flex-grow: 1;
         }
 
         h2 {
             text-align: center;
-            color: #2c3e50;
+            color: #4B1F81; /* Roxo escuro */
             margin-bottom: 25px;
         }
 
@@ -61,7 +72,7 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #333;
+            color: #5E2B97; /* Roxo profundo */
         }
 
         input[type="text"],
@@ -71,17 +82,26 @@
             width: 100%;
             padding: 10px;
             margin-bottom: 18px;
-            border: 1px solid #ccc;
+            border: 1px solid #8E44AD; /* Roxo claro na borda */
             border-radius: 6px;
             font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="tel"]:focus {
+            border-color: #4B1F81; /* Roxo escuro no foco */
+            outline: none;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background-color: #1abc9c;
+            background-color: #4B1F81; /* Roxo escuro */
             border: none;
-            color: white;
+            color: #ECF0F1;
             font-size: 16px;
             font-weight: 600;
             border-radius: 6px;
@@ -90,22 +110,36 @@
         }
 
         button:hover {
-            background-color: #16a085;
+            background-color: #F1C40F; /* Amarelo suave no hover */
+            color: #4B1F81; /* Texto roxo para contraste */
         }
 
         .login-link {
             text-align: center;
             margin-top: 16px;
             font-size: 14px;
+            color: #5E2B97;
         }
 
         .login-link a {
-            color: #3498db;
+            color: #8E44AD; /* Roxo claro */
             text-decoration: none;
+            transition: color 0.3s;
         }
 
         .login-link a:hover {
+            color: #F1C40F; /* Amarelo suave */
             text-decoration: underline;
+        }
+
+        footer {
+            background-color: #4B1F81;
+            color: #ECF0F1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -146,6 +180,10 @@
         Já possui uma conta? <a href="/login">Faça login</a>
     </div>
 </div>
+
+<footer>
+    © 2025 ShareTools. Todos os direitos reservados.
+</footer>
 
 </body>
 </html>

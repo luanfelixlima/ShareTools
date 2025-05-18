@@ -9,19 +9,22 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #ECF0F1; /* Fundo branco acinzentado */
             color: #333;
         }
 
         header {
-            background-color: #2c3e50;
-            color: white;
+            background-color: #4B1F81; /* Roxo ainda mais forte para destacar */
+            color: #ECF0F1;
             padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.8); /* Sombra mais escura e espalhada */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
@@ -29,7 +32,7 @@
             align-items: center;
             font-size: 24px;
             font-weight: 600;
-            color: white;
+            color: #ECF0F1;
         }
 
         .navbar-links {
@@ -39,14 +42,14 @@
         }
 
         .navbar-links a {
-            color: white;
+            color: #ECF0F1;
             text-decoration: none;
             font-size: 16px;
             transition: color 0.3s;
         }
 
         .navbar-links a:hover {
-            color: #1abc9c;
+            color: #F1C40F; /* Amarelo Suave no hover */
         }
 
         .auth-buttons {
@@ -57,8 +60,8 @@
 
         .auth-buttons button {
             background-color: transparent;
-            border: 1px solid #fff;
-            color: white;
+            border: 1px solid #ECF0F1;
+            color: #ECF0F1;
             padding: 8px 16px;
             font-size: 14px;
             border-radius: 6px;
@@ -67,29 +70,24 @@
         }
 
         .auth-buttons button:hover {
-            background-color: #1abc9c;
-            border-color: #1abc9c;
-            color: white;
+            background-color: #F1C40F; /* amarelo hover */
+            border-color: #F1C40F;
+            color: #4B1F81; /* texto roxo escuro para contraste */
         }
 
         .auth-buttons .register {
-            background-color: #1abc9c;
-            border-color: #1abc9c;
+            background-color: #8E44AD; /* Roxo Claro */
+            border-color: #8E44AD;
         }
 
         .auth-buttons .register:hover {
-            background-color: #16a085;
-            border-color: #16a085;
-        }
-
-
-        .logo {
-            font-size: 24px;
-            font-weight: 600;
+            background-color: #4B1F81; /* Roxo ainda mais forte */
+            border-color: #4B1F81;
+            color: #ECF0F1;
         }
 
         nav a {
-            color: white;
+            color: #ECF0F1;
             margin-left: 20px;
             text-decoration: none;
             font-size: 16px;
@@ -97,14 +95,14 @@
         }
 
         nav a:hover {
-            color: #1abc9c;
+            color: #F1C40F;
         }
 
         .hero {
             text-align: center;
             padding: 80px 20px 60px;
-            background: linear-gradient(to right, #1abc9c, #16a085);
-            color: white;
+            background: linear-gradient(to right, #8E44AD, #5E2B97); /* Roxo Claro para Roxo Profundo */
+            color: #ECF0F1;
         }
 
         .hero h1 {
@@ -118,8 +116,8 @@
         }
 
         .hero button {
-            background-color: #ffffff;
-            color: #16a085;
+            background-color: #F39C12; /* Laranja Vibrante */
+            color: #5E2B97; /* Roxo Profundo */
             border: none;
             padding: 14px 28px;
             font-size: 16px;
@@ -130,7 +128,7 @@
         }
 
         .hero button:hover {
-            background-color: #ecf0f1;
+            background-color: #F1C40F; /* Amarelo Suave no hover */
         }
 
         .section {
@@ -141,7 +139,7 @@
         .section h2 {
             font-size: 32px;
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #5E2B97; /* Roxo Profundo */
         }
 
         .features {
@@ -158,38 +156,66 @@
 
         .material-symbols-outlined {
             font-size: 48px;
-            color: #16a085;
+            color: #8E44AD; /* Roxo Claro */
             margin-bottom: 10px;
         }
 
         .cta {
-            background-color: #2c3e50;
-            color: white;
+            background-color: #5E2B97; /* Roxo Profundo */
+            color: #ECF0F1;
             padding: 60px 20px;
         }
 
         .cta button {
             margin-top: 20px;
-            background-color: #1abc9c;
-            color: white;
+            background-color: #F39C12; /* Laranja Vibrante */
+            color: #5E2B97; /* Roxo Profundo */
             padding: 14px 32px;
             font-size: 18px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: background-color 0.3s;
         }
 
         .cta button:hover {
-            background-color: #16a085;
+            background-color: #F1C40F; /* Amarelo Suave */
         }
 
         footer {
-            background-color: #222;
-            color: #bbb;
+            background-color: #5E2B97; /* Roxo Profundo */
+            color: #ECF0F1;
             text-align: center;
             padding: 20px;
             font-size: 14px;
+        }
+
+        /* Contato Section Custom */
+        #contato {
+            padding: 40px 20px;
+            background-color: #ECF0F1; /* Fundo branco acinzentado */
+            color: #5E2B97;
+        }
+        #contato h2 {
+            margin-bottom: 16px;
+            color: #5E2B97;
+        }
+        #contato p {
+            font-size: 16px;
+            color: #5E2B97;
+        }
+        #contato a {
+            color: #8E44AD;
+            text-decoration: none;
+        }
+        #contato a:hover {
+            color: #F39C12;
+            text-decoration: underline;
+        }
+        #contato .material-symbols-outlined {
+            font-size: 20px;
+            color: #F39C12;
         }
 
         @media (max-width: 768px) {
@@ -202,6 +228,7 @@
                 font-size: 36px;
             }
         }
+
     </style>
 </head>
 <body>
