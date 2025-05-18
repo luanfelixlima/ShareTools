@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RequestMapping("/users")
+@RequestMapping("/admin/users")
 @Controller
 public class UserController {
 
@@ -61,7 +61,7 @@ public class UserController {
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @PostMapping("/update")
@@ -83,7 +83,7 @@ public class UserController {
         // Salva o usuário atualizado (sem sobrescrever a senha)
         userService.save(existingUser);
 
-        return "redirect:/users";
+        return "redirect:/admin/users;";
     }
 
 

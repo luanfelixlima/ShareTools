@@ -73,7 +73,7 @@
 
 <div class="container">
     <h2>Editar Usuário</h2>
-    <form th:action="@{/users/update}" th:object="${user}" method="post">
+    <form th:action="@{/admin/users/update}" th:object="${user}" method="post">
         <input type="hidden" th:field="*{id}" />
 
         <label>Nome:

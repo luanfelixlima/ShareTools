@@ -26,6 +26,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -44,6 +45,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")  // <-- só ADMIN acessa
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -166,8 +166,8 @@
             <td th:text="${user.phone}"></td>
             <td th:text="${user.role.name}"></td>
             <td class="actions">
-                <a th:href="@{'/users/edit/' + ${user.id}}" class="edit-btn">Editar</a>
-                <a th:href="@{'/users/delete/' + ${user.id}}" class="delete-btn"
+                <a th:href="@{'/admin/users/edit/' + ${user.id}}" class="edit-btn">Editar</a>
+                <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="delete-btn"
                    onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
             </td>
         </tr>
