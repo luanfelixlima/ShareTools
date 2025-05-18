@@ -41,23 +41,30 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**", "/h2-console/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**", "/h2-console/**").permitAll() // acessos públicos
+                        .anyRequest().authenticated() // todos os outros requerem login
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .usernameParameter("email")           // <--- aqui diz que o campo do formulário é "email"
-                        .passwordParameter("password")        // opcional, mas explícito
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/login?error=true")      // <--- URL para redirecionar se erro no login
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/dashboard", true) // redirecionamento após login bem-sucedido
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll());
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/") // redireciona para "/" após logout
+                        .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                );
 
         http.headers(headers -> headers.frameOptions().disable());
         http.csrf(csrf -> csrf.disable());
 
         return http.build();
     }
-
 }

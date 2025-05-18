@@ -48,4 +48,9 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> passwordEncoder.matches(rawPassword, user.getPassword()))
                 .orElse(null);
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
