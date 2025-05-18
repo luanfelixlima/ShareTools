@@ -25,8 +25,7 @@ public class UserController {
         this.roleRepository = roleRepository;
     }
 
-    // Comentado pois não é necessário
- /*   @GetMapping("/register")
+    @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
         return "register";
@@ -51,7 +50,7 @@ public class UserController {
         User created = userService.save(user);
         return ResponseEntity.ok(created);
     }
-*/
+
     @GetMapping
     public String listUsers(Model model) {
         List<User> users = userService.findAll();
@@ -59,5 +58,42 @@ public class UserController {
         return "users";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteById(id);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute("user") User user) {
+        // Busca o usuário original do banco
+        User existingUser = userService.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com ID: " + user.getId()));
+
+        // Atualiza os dados permitidos
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhone(user.getPhone());
+
+        // Atualiza o cargo (Role)
+        Role role = roleRepository.findById(user.getRole().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Role inválido: " + user.getRole().getId()));
+        existingUser.setRole(role);
+
+        // Salva o usuário atualizado (sem sobrescrever a senha)
+        userService.save(existingUser);
+
+        return "redirect:/users";
+    }
+
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        User user = userService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roleRepository.findAll());
+        return "edit-user";
+    }
 
 }

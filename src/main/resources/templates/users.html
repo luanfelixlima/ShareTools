@@ -116,14 +116,15 @@
         </thead>
         <tbody>
         <tr th:each="user : ${users}">
-            <td th:text="${user.id}">1</td>
-            <td th:text="${user.name}">Nome</td>
-            <td th:text="${user.email}">email@email.com</td>
-            <td th:text="${user.phone}">Telefone</td>
-            <td th:text="${user.role.name}">Cargo</td>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.phone}"></td>
+            <td th:text="${user.role.name}"></td>
             <td class="actions">
-                <button class="edit-btn" th:onclick="'location.href=\'/users/edit/' + ${user.id} + '\''">Editar</button>
-                <button class="delete-btn" th:onclick="'location.href=\'/users/delete/' + ${user.id} + '\''">Excluir</button>
+                <a th:href="@{'/users/edit/' + ${user.id}}" class="edit-btn">Editar</a>
+                <a th:href="@{'/users/delete/' + ${user.id}}" class="delete-btn"
+                   onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
             </td>
         </tr>
         </tbody>
