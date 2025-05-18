@@ -45,14 +45,15 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")  // <-- só ADMIN acessa
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/h2-console/**").hasAuthority("ADMIN")  // 🔒 Apenas ADMIN acessa o H2 Console
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .successHandler(customAuthenticationSuccessHandler)  // <- AQUI!
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -61,11 +62,11 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable());  // ⚠️ CSRF precisa estar desativado para o H2 funcionar
 
-        http.headers(headers -> headers.frameOptions().disable());
-        http.csrf(csrf -> csrf.disable());
+        http.headers(headers -> headers.frameOptions().disable()); // ⚠️ Também necessário para H2
 
         return http.build();
     }
+
 }

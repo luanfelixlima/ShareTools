@@ -125,23 +125,45 @@
         .delete-btn:hover {
             background-color: #c0392b;
         }
+
+        .h2-btn {
+            background-color: #f1c40f;
+            color: #2c3e50;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-left: 20px;
+        }
+
+        .h2-btn:hover {
+            background-color: #d4ac0d;
+        }
+
     </style>
 </head>
 <body>
 
 <header>
+    <a href="/h2-console" target="_blank" class="h2-btn">H2 Console</a>
+
     <div class="logo">
         <span>⚙️</span>
         <span>Admin - ShareTools</span>
     </div>
 
-    <div class="user-icon" id="userIcon">
-        <span>👤 <span th:if="${userLogado != null}" th:text="'👤 ' + ${#strings.split(userLogado.name, ' ')[0]}">👤 Usuário</span>
-        </span>
-        <div class="user-dropdown" id="userDropdown">
-            <a href="/logout">Sair</a>
+    <div style="display: flex; align-items: center;">
+        <div class="user-icon" id="userIcon" style="margin-left: 20px;">
+            <span>👤 <span th:if="${userLogado != null}" th:text="'👤 ' + ${#strings.split(userLogado.name, ' ')[0]}">👤 Usuário</span>
+            </span>
+            <div class="user-dropdown" id="userDropdown">
+                <a href="/logout">Sair</a>
+            </div>
         </div>
     </div>
+
 </header>
 
 <main>
