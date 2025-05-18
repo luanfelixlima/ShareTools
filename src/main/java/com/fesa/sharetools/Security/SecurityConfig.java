@@ -1,6 +1,5 @@
 package com.fesa.sharetools.Security;
 
-import com.fesa.sharetools.Security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,9 +13,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService,
+                          CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
         this.userDetailsService = userDetailsService;
+        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
 
     @Bean
@@ -41,26 +43,23 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**", "/h2-console/**").permitAll() // acessos públicos
-                        .anyRequest().authenticated() // todos os outros requerem login
+                        .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/dashboard", true) // redirecionamento após login bem-sucedido
+                        .successHandler(customAuthenticationSuccessHandler)  // <- AQUI!
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/") // redireciona para "/" após logout
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .sessionManagement(session -> session
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false)
-                );
+                .csrf(csrf -> csrf.disable());
 
         http.headers(headers -> headers.frameOptions().disable());
         http.csrf(csrf -> csrf.disable());

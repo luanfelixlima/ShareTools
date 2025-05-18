@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Gestão de Usuários - ShareTools</title>
@@ -115,30 +115,17 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Exemplo de preenchimento estático. Substitua por loop no backend -->
-        <tr>
-            <td>1</td>
-            <td>João da Silva</td>
-            <td>joao@email.com</td>
-            <td>(11) 99999-9999</td>
-            <td>Admin</td>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.name}">Nome</td>
+            <td th:text="${user.email}">email@email.com</td>
+            <td th:text="${user.phone}">Telefone</td>
+            <td th:text="${user.role.name}">Cargo</td>
             <td class="actions">
-                <button class="edit-btn">Editar</button>
-                <button class="delete-btn">Excluir</button>
+                <button class="edit-btn" th:onclick="'location.href=\'/users/edit/' + ${user.id} + '\''">Editar</button>
+                <button class="delete-btn" th:onclick="'location.href=\'/users/delete/' + ${user.id} + '\''">Excluir</button>
             </td>
         </tr>
-        <tr>
-            <td>2</td>
-            <td>Maria Souza</td>
-            <td>maria@email.com</td>
-            <td>(11) 98888-8888</td>
-            <td>Usuário</td>
-            <td class="actions">
-                <button class="edit-btn">Editar</button>
-                <button class="delete-btn">Excluir</button>
-            </td>
-        </tr>
-        <!-- Repita dinamicamente -->
         </tbody>
     </table>
 </main>

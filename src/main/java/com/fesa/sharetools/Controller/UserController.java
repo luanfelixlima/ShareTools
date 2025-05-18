@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+
 @RequestMapping("/users")
+@Controller
 public class UserController {
 
     private final UserService userService;
@@ -22,7 +25,8 @@ public class UserController {
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping("/register")
+    // Comentado pois não é necessário
+ /*   @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
         return "register";
@@ -47,4 +51,13 @@ public class UserController {
         User created = userService.save(user);
         return ResponseEntity.ok(created);
     }
+*/
+    @GetMapping
+    public String listUsers(Model model) {
+        List<User> users = userService.findAll();
+        model.addAttribute("users", users);
+        return "users";
+    }
+
+
 }
