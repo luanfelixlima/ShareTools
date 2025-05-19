@@ -8,4 +8,5 @@ public interface UserService extends BaseService<User, Long> {
     User save(User user);
     User authenticate(String email, String password);
     Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
 }

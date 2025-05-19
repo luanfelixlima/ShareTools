@@ -26,12 +26,23 @@ public class PublicUserController {
         return "register"; // Você pode usar o mesmo "register.html"
     }
 
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login";
+    }
+
     @PostMapping("/register")
-    public String processPublicRegister(@ModelAttribute("user") User user) {
-        Role role = roleRepository.findById(2L) // ID 2 = USER
+    public String processPublicRegister(@ModelAttribute("user") User user, Model model) {
+        if (userService.existsByEmail(user.getEmail())) {
+            model.addAttribute("emailError", "Este e-mail já está em uso.");
+            return "register"; // volta para a tela com erro
+        }
+
+        Role role = roleRepository.findById(2L)
                 .orElseThrow(() -> new RuntimeException("Role USER (ID 2) não encontrada"));
         user.setRole(role);
         userService.save(user);
         return "redirect:/login";
     }
+
 }

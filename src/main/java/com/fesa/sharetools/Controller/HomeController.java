@@ -16,12 +16,12 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "redirect:/users/login"; // Redireciona para o novo
     }
 
     @GetMapping("/register")
-    public String register() {
-        return "register";
+    public String redirectToUserRegister() {
+        return "redirect:/users/register";
     }
 
 }

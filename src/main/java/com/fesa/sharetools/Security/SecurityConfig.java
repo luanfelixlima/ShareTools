@@ -44,20 +44,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/users/**", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**", "/h2-console/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/users/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(customAuthenticationSuccessHandler)
-                        .failureUrl("/login?error=true")
+                        .failureUrl("/users/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
+                        .logoutUrl("/users/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
