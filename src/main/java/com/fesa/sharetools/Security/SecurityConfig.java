@@ -45,8 +45,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index", "/register", "/users/register", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/h2-console/**").hasAuthority("ADMIN")  // 🔒 Apenas ADMIN acessa o H2 Console
+                        .requestMatchers("/admin/**", "/h2-console/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

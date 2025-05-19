@@ -15,12 +15,12 @@ import java.util.List;
 
 @RequestMapping("/admin/users")
 @Controller
-public class UserController {
+public class AdminUserController {
 
     private final UserService userService;
     private final RoleRepository roleRepository;
 
-    public UserController(UserService userService, RoleRepository roleRepository) {
+    public AdminUserController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
     }
