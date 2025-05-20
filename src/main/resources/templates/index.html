@@ -18,8 +18,16 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #ECF0F1;
+            background: linear-gradient(135deg, #e5dcf5, #f9f4ff);
             color: #333;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
         }
 
         header {
@@ -34,6 +42,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-radius: 0 0 12px 12px;
         }
 
         .logo {
@@ -41,13 +50,13 @@
             align-items: center;
             font-size: 28px;
             font-weight: 700;
-            color: #F1C40F; /* Amarelo suave para destaque */
+            color: #ffffff;
             transition: color 0.3s ease;
         }
-        .logo:hover {
-            color: #ffffff;
-        }
 
+        .logo:hover {
+            color: #F1C40F;
+        }
 
         .navbar-links {
             display: flex;
@@ -117,6 +126,7 @@
             padding: 80px 20px 60px;
             background: linear-gradient(to right, #8E44AD, #5E2B97);
             color: #ECF0F1;
+            box-shadow: 0 6px 16px rgba(75, 31, 129, 0.2);
         }
 
         .hero h1 {
@@ -148,6 +158,7 @@
         .section {
             padding: 60px 20px;
             text-align: center;
+            background-color: #fff;
         }
 
         .section h2 {
@@ -203,6 +214,7 @@
             text-align: center;
             padding: 20px;
             font-size: 14px;
+            border-radius: 12px 12px 0 0;
         }
 
         #contato {
@@ -224,6 +236,7 @@
         #contato a {
             color: #8E44AD;
             text-decoration: none;
+            transition: color 0.3s;
         }
 
         #contato a:hover {
@@ -236,6 +249,7 @@
             color: #F39C12;
         }
 
+        /* Responsivo */
         @media (max-width: 768px) {
             .features {
                 flex-direction: column;
@@ -245,7 +259,21 @@
             .hero h1 {
                 font-size: 36px;
             }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+
+            .cta button {
+                padding: 12px 24px;
+                font-size: 16px;
+            }
         }
+
     </style>
 </head>
 <body>
