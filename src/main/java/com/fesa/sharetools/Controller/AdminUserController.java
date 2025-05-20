@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequestMapping("/admin/users")
 @Controller
-public class AdminUserController {
+public class  AdminUserController {
 
     private final UserService userService;
     private final RoleRepository roleRepository;
@@ -83,7 +83,7 @@ public class AdminUserController {
         // Salva o usuário atualizado (sem sobrescrever a senha)
         userService.save(existingUser);
 
-        return "redirect:/admin/users;";
+        return "redirect:/admin/users";
     }
 
 

@@ -2,12 +2,13 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Usuário</title>
+    <title>Editar Usuário - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4f4f9;
+            margin: 0;
             padding: 40px;
         }
 
@@ -16,44 +17,47 @@
             margin: auto;
             background: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
         }
 
         h2 {
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
+            color: #6a1b9a; /* Roxo escuro */
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #34495e;
+            font-weight: 600;
         }
 
         input, select {
             width: 100%;
             padding: 10px;
-            margin-top: 4px;
-            margin-bottom: 16px;
+            margin-top: 6px;
+            margin-bottom: 20px;
             border-radius: 6px;
             border: 1px solid #ccc;
+            font-size: 1rem;
         }
 
         button {
-            background-color: #27ae60;
+            background-color: #6a1b9a;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             width: 100%;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #1e8449;
+            background-color: #4a148c;
         }
 
         a {
@@ -62,6 +66,7 @@
             margin-top: 20px;
             text-decoration: none;
             color: #3498db;
+            font-weight: 600;
         }
 
         a:hover {
@@ -76,20 +81,20 @@
     <form th:action="@{/admin/users/update}" th:object="${user}" method="post">
         <input type="hidden" th:field="*{id}" />
 
-        <label>Nome:
-            <input type="text" th:field="*{name}" required/>
+        <label for="name">Nome:
+            <input type="text" id="name" th:field="*{name}" required/>
         </label>
 
-        <label>Email:
-            <input type="email" th:field="*{email}" required/>
+        <label for="email">Email:
+            <input type="email" id="email" th:field="*{email}" required/>
         </label>
 
-        <label>Telefone:
-            <input type="text" th:field="*{phone}" />
+        <label for="phone">Telefone:
+            <input type="text" id="phone" th:field="*{phone}" />
         </label>
 
-        <label>Cargo:
-            <select th:field="*{role.id}">
+        <label for="role">Cargo:
+            <select id="role" th:field="*{role.id}">
                 <option th:each="role : ${roles}"
                         th:value="${role.id}"
                         th:text="${role.name}">
@@ -100,7 +105,7 @@
         <button type="submit">Salvar</button>
     </form>
 
-    <a href="/users">Cancelar</a>
+    <a href="/admin/users">Cancelar</a>
 </div>
 
 </body>

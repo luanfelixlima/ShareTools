@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Registrar - ShareTools</title>
@@ -160,17 +161,27 @@
     <h2>Crie sua Conta</h2>
     <form method="post" action="/users/register" th:object="${user}">
         <label for="name">Nome Completo</label>
-        <input type="text" id="name" th:field="*{name}" required>
+        <input type="text" id="name" th:field="*{name}" required
+               pattern="^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)+$"
+               title="Digite seu nome completo (nome e sobrenome)">
 
         <label for="email">E-mail:</label>
-        <input type="email" id="email" th:field="*{email}" required />
+        <input type="email" id="email" th:field="*{email}" required
+               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+               title="Digite um e-mail válido (ex: usuario@dominio.com)">
         <p th:if="${emailError}" th:text="${emailError}" style="color: red; margin-top: -12px; margin-bottom: 12px;"></p>
 
         <label for="phone">Telefone</label>
-        <input type="tel" id="phone" th:field="*{phone}" required>
+        <input type="tel" id="phone" th:field="*{phone}" required
+               pattern="\(\d{2}\)\s?\d{4,5}-\d{4}"
+               title="Formato esperado: (11) 91234-5678"
+               placeholder="(11) 91234-5678">
+
 
         <label for="password">Senha</label>
-        <input type="password" id="password" th:field="*{password}" required>
+        <input type="password" id="password" th:field="*{password}" required
+               pattern=".{8,}"
+               title="A senha deve conter pelo menos 8 caracteres">
 
         <button type="submit">Registrar</button>
     </form>
@@ -182,6 +193,28 @@
 <footer>
     © 2025 ShareTools. Todos os direitos reservados.
 </footer>
+
+<script>
+    const phoneInput = document.getElementById('phone');
+
+    phoneInput.addEventListener('input', function (e) {
+        let x = e.target.value.replace(/\D/g, '').substring(0, 11); // remove não números
+        let formatted = '';
+
+        if (x.length > 10) {
+            formatted = `(${x.substring(0, 2)}) ${x.substring(2, 7)}-${x.substring(7)}`;
+        } else if (x.length > 6) {
+            formatted = `(${x.substring(0, 2)}) ${x.substring(2, 6)}-${x.substring(6)}`;
+        } else if (x.length > 2) {
+            formatted = `(${x.substring(0, 2)}) ${x.substring(2)}`;
+        } else if (x.length > 0) {
+            formatted = `(${x}`;
+        }
+
+        e.target.value = formatted;
+    });
+</script>
+
 
 </body>
 </html>
