@@ -61,6 +61,9 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/access-denied")
+                )
                 .csrf(csrf -> csrf.disable());  // ⚠️ CSRF precisa estar desativado para o H2 funcionar
 
         http.headers(headers -> headers.frameOptions().disable()); // ⚠️ Também necessário para H2
