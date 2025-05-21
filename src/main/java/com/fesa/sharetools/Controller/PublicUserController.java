@@ -35,11 +35,13 @@ public class PublicUserController {
     public String processPublicRegister(@ModelAttribute("user") User user, Model model) {
         if (userService.existsByEmail(user.getEmail())) {
             model.addAttribute("emailError", "Este e-mail já está em uso.");
-            return "register"; // volta para a tela com erro
+            return "register";
         }
 
-        Role role = roleRepository.findById(2L)
-                .orElseThrow(() -> new RuntimeException("Role USER (ID 2) não encontrada"));
+        // Corrigido: busca pelo nome da role
+        Role role = roleRepository.findByName("USER")
+                .orElseThrow(() -> new RuntimeException("Role USER não encontrada"));
+
         user.setRole(role);
         userService.save(user);
         return "redirect:/login";
