@@ -46,6 +46,8 @@ public class DashboardController {
         newTool.setOwner(user);
         toolService.save(newTool);
 
-        return "redirect:/";
+        //return "redirect:/";
+        return "redirect:/dashboard";
+
     }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Página não encontrada</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: #ECF0F1;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .error-container {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 80px;
+        color: #4B1F81;
+    }
+
+    p {
+        font-size: 18px;
+        color: #5E2B97;
+        margin: 10px 0 30px;
+    }
+
+    a.button {
+        background-color: #4B1F81;
+        color: #ECF0F1;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+    }
+
+    a.button:hover {
+        background-color: #F1C40F;
+        color: #4B1F81;
+    }
+
+    footer {
+        background-color: #4B1F81;
+        color: #ECF0F1;
+        text-align: center;
+        padding: 14px;
+        font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<div class="error-container">
+  <h1>404</h1>
+  <p>Ops! A página que você está procurando não existe.</p>
+  <a class="button" href="/">Voltar para o início</a>
+</div>
+
+<footer>
+  &copy; 2025 ShareTools. Todos os direitos reservados.
+</footer>
+</body>
+</html>

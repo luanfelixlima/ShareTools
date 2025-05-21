@@ -1,5 +1,6 @@
 package com.fesa.sharetools.Security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -62,8 +63,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/access-denied")
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                        })
                 )
+
                 .csrf(csrf -> csrf.disable());  // ⚠️ CSRF precisa estar desativado para o H2 funcionar
 
         http.headers(headers -> headers.frameOptions().disable()); // ⚠️ Também necessário para H2

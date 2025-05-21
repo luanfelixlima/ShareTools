@@ -208,14 +208,14 @@
 </header>
 
 <div class="container">
-    <h2>Crie sua Conta</h2>
+    <h2>Crie sua conta</h2>
     <form method="post" action="/users/register" th:object="${user}">
-        <label for="name">Nome Completo</label>
+        <label for="name">Nome completo</label>
         <input type="text" id="name" th:field="*{name}" required
                pattern="^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)+$"
                title="Digite seu nome completo (nome e sobrenome)">
 
-        <label for="email">E-mail:</label>
+        <label for="email">E-mail</label>
         <input type="email" id="email" th:field="*{email}" required
                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                title="Digite um e-mail válido (ex: usuario@dominio.com)">
