@@ -5,6 +5,15 @@
     <title>Dashboard - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --roxo: #4B1F81;
+            --roxo-escuro: #36175E;
+            --amarelo: #F1C40F;
+            --amarelo-hover: #F39C12;
+            --cinza-claro: #f4f6f8;
+            --texto: #333;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,8 +22,8 @@
         }
 
         body {
-            background-color: #f4f6f8;
-            color: #333;
+            background-color: var(--cinza-claro);
+            color: var(--texto);
             margin-top: 80px;
         }
 
@@ -22,7 +31,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background-color: #4B1F81;
+            background-color: var(--roxo);
             color: #ECF0F1;
             padding: 16px 40px;
             display: flex;
@@ -37,10 +46,11 @@
             color: #ECF0F1;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: #F1C40F;
+            color: var(--amarelo);
         }
 
         .user-icon {
@@ -59,21 +69,118 @@
             right: 0;
             top: 40px;
             background-color: white;
-            color: #333;
+            color: var(--texto);
             padding: 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             min-width: 150px;
             text-align: left;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(10px);
         }
 
-        .user-dropdown a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .user-icon:hover .user-dropdown {
+        .user-icon:hover .user-dropdown,
+        .user-dropdown:hover {
             display: block;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
         }
+
+        .tool-pills {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        .tool-pills li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .tool-pills li:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.15);
+        }
+
+        /* --- Estilos para a legenda --- */
+        .pill-legend {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px; /* Aumentei um pouco a margem para separar da lista principal */
+            align-items: center;
+            font-size: 0.8rem; /* Tamanho de fonte um pouco menor para a legenda em si */
+            color: #777; /* Um cinza mais claro para o texto da legenda */
+            font-weight: 400;
+            line-height: 1.4;
+            padding: 8px 0; /* Padding vertical para dar espaço */
+            border-top: 1px solid #ddd; /* Borda superior sutil */
+            border-bottom: 1px solid #ddd; /* Borda inferior sutil */
+            background-color: #fcfcfc; /* Fundo levemente diferente para destacá-la como uma seção */
+            border-radius: 4px; /* Leve arredondamento */
+            padding-left: 10px; /* Um pouco de padding à esquerda */
+        }
+
+        /* Estilos específicos para os .pill DENTRO da legenda */
+        .pill-legend .pill {
+            padding: 4px 8px; /* Reduzi o padding para as "pills" da legenda */
+            border-radius: 12px; /* Reduzi o border-radius para ficarem menores */
+            font-size: 0.75rem; /* Reduzi o tamanho da fonte para as "pills" da legenda */
+            font-weight: 500; /* Levemente menos negrito */
+        }
+
+        .pill-legend .pill.tool {
+            background-color: #E0E0E0; /* Cor de fundo mais clara para a "pill" da ferramenta na legenda */
+            color: #555; /* Cor de texto mais escura para melhor legibilidade */
+        }
+
+        .pill-legend .pill.owner {
+            background-color: #F8E7A2; /* Cor de fundo mais clara para a "pill" do proprietário na legenda */
+            color: #8D6B0F; /* Cor de texto mais escura para melhor legibilidade */
+        }
+        /* --- Fim dos estilos para a legenda --- */
+
+        .pill {
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .pill.tool {
+            background-color: #4B1F81;
+            color: #ECF0F1;
+        }
+
+        .pill.owner {
+            background-color: #F1C40F;
+            color: #4B1F81;
+        }
+
+        .btn-emprestimo {
+            background-color: var(--amarelo);
+            color: var(--roxo);
+            font-weight: 600;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-emprestimo:hover {
+            background-color: var(--amarelo-hover);
+            transform: scale(1.05);
+        }
+
 
         main {
             max-width: 900px;
@@ -82,15 +189,16 @@
         }
 
         h1 {
-            font-size: 2rem;
-            color: #4B1F81;
+            font-size: 2.4rem;
+            color: var(--roxo);
             margin-bottom: 25px;
+            transition: color 0.3s;
         }
 
         h2 {
             margin-top: 40px;
             font-size: 1.5rem;
-            color: #5E2B97;
+            color: var(--roxo-escuro);
             border-bottom: 1px solid #ddd;
             padding-bottom: 8px;
         }
@@ -105,14 +213,19 @@
             padding: 12px 15px;
             margin-bottom: 8px;
             border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        ul li:hover {
+            transform: scale(1.01);
         }
 
         form {
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
 
@@ -120,7 +233,7 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #5E2B97;
+            color: var(--roxo-escuro);
         }
 
         input[type="text"],
@@ -128,25 +241,33 @@
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #8E44AD;
-            border-radius: 6px;
+            border: 1px solid var(--roxo);
+            border-radius: 8px;
             font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--amarelo);
+            outline: none;
         }
 
         button {
-            background-color: #4B1F81;
+            background-color: var(--roxo);
             color: #ECF0F1;
             padding: 12px 20px;
             border: none;
             font-weight: 600;
             font-size: 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         button:hover {
-            background-color: #F1C40F;
-            color: #4B1F81;
+            background-color: var(--amarelo);
+            color: var(--roxo);
         }
     </style>
 </head>
@@ -179,12 +300,23 @@
     </ul>
 
     <h2>Ferramentas disponíveis de outros usuários</h2>
-    <ul>
+    <div class="pill-legend">
+        <span class="pill tool">Nome da Ferramenta</span>
+        <span class="pill owner">Proprietário</span>
+    </div>
+
+    <ul class="tool-pills">
         <li th:each="tool : ${otherTools}">
-            <span th:text="${tool.name}">Nome da ferramenta</span>
-            - <span th:text="${tool.owner.name}">Proprietário</span>
+            <span class="pill tool" th:text="${tool.name}">Nome da ferramenta</span>
+            <span class="pill owner" th:text="${tool.owner.name}">Proprietário</span>
+            <form th:action="@{/emprestimos/solicitar}" method="post" style="margin-left:auto;">
+                <input type="hidden" name="toolId" th:value="${tool.id}" />
+                <button type="submit" class="btn-emprestimo">Solicitar</button>
+            </form>
         </li>
     </ul>
+
+
 
     <h2>Cadastrar nova ferramenta</h2>
     <form th:action="@{/tools}" method="post" th:object="${newTool}">
@@ -203,30 +335,27 @@
     const dropdown = document.querySelector('.user-dropdown');
     let hideTimeout;
 
-    userIcon.addEventListener('mouseenter', () => {
+    function showDropdown() {
         clearTimeout(hideTimeout);
         dropdown.style.display = 'block';
-    });
+        dropdown.style.opacity = '1';
+        dropdown.style.pointerEvents = 'auto';
+        dropdown.style.transform = 'translateY(0)';
+    }
 
-    userIcon.addEventListener('mouseleave', () => {
+    function hideDropdownWithDelay() {
         hideTimeout = setTimeout(() => {
-            dropdown.style.display = 'none';
-        }, 1000); // 2 segundos
-    });
+            dropdown.style.opacity = '0';
+            dropdown.style.pointerEvents = 'none';
+            dropdown.style.transform = 'translateY(10px)';
+        }, 1000); // 1 segundo
+    }
 
-    dropdown.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimeout);
-        dropdown.style.display = 'block';
-    });
-
-    dropdown.addEventListener('mouseleave', () => {
-        hideTimeout = setTimeout(() => {
-            dropdown.style.display = 'none';
-        }, 1000);
-    });
+    userIcon.addEventListener('mouseenter', showDropdown);
+    userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
+    dropdown.addEventListener('mouseenter', showDropdown);
+    dropdown.addEventListener('mouseleave', hideDropdownWithDelay);
 </script>
 
-
 </body>
-
 </html>
