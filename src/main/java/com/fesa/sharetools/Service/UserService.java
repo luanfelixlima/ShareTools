@@ -9,4 +9,5 @@ public interface UserService extends BaseService<User, Long> {
     User authenticate(String email, String password);
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
+    long countByRoleName(String roleName);
 }

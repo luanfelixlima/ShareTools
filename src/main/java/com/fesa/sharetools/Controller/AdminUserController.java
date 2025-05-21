@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.List;
 
@@ -59,28 +63,54 @@ public class  AdminUserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        // 1. Pega email do usuário logado
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedInEmail = (principal instanceof UserDetails)
+                ? ((UserDetails) principal).getUsername()
+                : principal.toString();
+
+        // 2. Busca usuário logado pelo email
+        User loggedInUser = userService.findByEmail(loggedInEmail)
+                .orElseThrow(() -> new RuntimeException("Usuário logado não encontrado"));
+
+        // 3. Impede que o próprio usuário se delete
+        if (loggedInUser.getId().equals(id)) {
+            redirectAttributes.addFlashAttribute("error", "❌ Você não pode excluir a si mesmo.");
+            return "redirect:/admin/users";
+        }
+
+        // 4. Impede que o último ADMIN seja excluído
+        User userToDelete = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário a ser deletado não encontrado"));
+
+        if ("ADMIN".equals(userToDelete.getRole().getName())) {
+            long totalAdmins = userService.countByRoleName("ADMIN");
+            if (totalAdmins <= 1) {
+                redirectAttributes.addFlashAttribute("error", "❌ Não é possível excluir o último administrador.");
+                return "redirect:/admin/users";
+            }
+        }
+
+        // 5. Exclui normalmente
         userService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "✅ Usuário excluído com sucesso.");
         return "redirect:/admin/users";
     }
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user) {
-        // Busca o usuário original do banco
         User existingUser = userService.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com ID: " + user.getId()));
 
-        // Atualiza os dados permitidos
         existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());
         existingUser.setPhone(user.getPhone());
 
-        // Atualiza o cargo (Role)
         Role role = roleRepository.findById(user.getRole().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Role inválido: " + user.getRole().getId()));
         existingUser.setRole(role);
 
-        // Salva o usuário atualizado (sem sobrescrever a senha)
         userService.save(existingUser);
 
         return "redirect:/admin/users";
