@@ -63,5 +63,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.countByRole_Name(roleName);
     }
 
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário com email '" + email + "' não encontrado."));
+    }
 
 }

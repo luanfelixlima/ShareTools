@@ -1,6 +1,8 @@
 package com.fesa.sharetools.Model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tools")
@@ -8,36 +10,25 @@ public class Tool {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
+    @Getter
+    @Setter
     private String name;
 
+    @Getter
+    @Setter
     private String description;
 
+    @Getter
+    @Setter
     private boolean available = true;
 
+    @Getter
+    @Setter
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User owner;
-
-    // Getters e Setters
-    public Long getId() { return id; }
-
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public String getDescription() { return description; }
-
-    public void setDescription(String description) { this.description = description; }
-
-    public boolean isAvailable() { return available; }
-
-    public void setAvailable(boolean available) { this.available = available; }
-
-    public User getOwner() { return owner; }
-
-    public void setOwner(User owner) { this.owner = owner; }
 }

@@ -33,4 +33,16 @@ public class ToolServiceImpl extends BaseServiceImpl<Tool, Long> implements Tool
     public List<Tool> findAllExceptOwner(User user) {
         return toolRepository.findByOwnerNot(user);
     }
+
+    @Override
+    public Tool getById(Long id) {
+        return toolRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ferramenta com id '" + id + "' não encontrada."));
+    }
+
+    @Override
+    public Tool save(Tool tool) {
+        return toolRepository.save(tool);
+    }
+
 }

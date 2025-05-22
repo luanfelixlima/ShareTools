@@ -121,7 +121,7 @@
             padding: 8px 0; /* Padding vertical para dar espaço */
             border-top: 1px solid #ddd; /* Borda superior sutil */
             border-bottom: 1px solid #ddd; /* Borda inferior sutil */
-            background-color: #fcfcfc; /* Fundo levemente diferente para destacá-la como uma seção */
+            background-color: #dbdbdb; /* Fundo levemente diferente para destacá-la como uma seção */
             border-radius: 4px; /* Leve arredondamento */
             padding-left: 10px; /* Um pouco de padding à esquerda */
         }
@@ -135,13 +135,13 @@
         }
 
         .pill-legend .pill.tool {
-            background-color: #E0E0E0; /* Cor de fundo mais clara para a "pill" da ferramenta na legenda */
-            color: #555; /* Cor de texto mais escura para melhor legibilidade */
+            background-color: #4B1F81; /* Cor de fundo mais clara para a "pill" da ferramenta na legenda */
+            color: #ffffff; /* Cor de texto mais escura para melhor legibilidade */
         }
 
         .pill-legend .pill.owner {
             background-color: #F8E7A2; /* Cor de fundo mais clara para a "pill" do proprietário na legenda */
-            color: #8D6B0F; /* Cor de texto mais escura para melhor legibilidade */
+            color: #4B1F81; /* Cor de texto mais escura para melhor legibilidade */
         }
         /* --- Fim dos estilos para a legenda --- */
 
@@ -289,6 +289,14 @@
 </header>
 
 <main>
+    <div th:if="${success}" style="background-color:#DFF0D8; color:#3C763D; padding:10px; border-radius:5px; margin-bottom:20px;">
+        <p th:text="${success}"></p>
+    </div>
+
+    <div th:if="${error}" style="background-color:#F2DEDE; color:#A94442; padding:10px; border-radius:5px; margin-bottom:20px;">
+        <p th:text="${error}"></p>
+    </div>
+
     <h1>Bem-vindo, <span th:text="${user.name}">Usuário</span></h1>
 
     <h2>Suas Ferramentas</h2>
@@ -309,7 +317,7 @@
         <li th:each="tool : ${otherTools}">
             <span class="pill tool" th:text="${tool.name}">Nome da ferramenta</span>
             <span class="pill owner" th:text="${tool.owner.name}">Proprietário</span>
-            <form th:action="@{/emprestimos/solicitar}" method="post" style="margin-left:auto;">
+            <form th:action="@{/loans/create}" method="post" style="margin-left:auto;">
                 <input type="hidden" name="toolId" th:value="${tool.id}" />
                 <button type="submit" class="btn-emprestimo">Solicitar</button>
             </form>
