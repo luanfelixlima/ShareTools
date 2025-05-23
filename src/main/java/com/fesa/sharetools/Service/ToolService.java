@@ -12,4 +12,7 @@ public interface ToolService extends BaseService<Tool, Long> {
     Optional<Tool> findById(Long id);
     Tool getById(Long id);
     Tool save(Tool tool);
+    List<Tool> findByOwnerNotAndAvailableTrue(User user);
+
+    List<Tool> getAvailableToolsFromOtherUsers(User currentUser);
 }

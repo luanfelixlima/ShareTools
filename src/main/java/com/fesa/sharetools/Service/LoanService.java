@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface LoanService {
     void createLoan(Tool tool, User owner, User borrower);
-    List<Loan> getLoansByBorrower(Long userId);
-    List<Loan> getLoansByOwner(Long userId);
+    // List<Loan> getLoansByBorrower(Long userId);
+    // List<Loan> getLoansByOwner(Long userId);
     void returnLoan(Long loanId);
+    List<Loan> findActiveLoansByBorrower(User borrower);
+    List<Loan> getLoansByBorrower(User borrower);
+    List<Loan> getLoansByOwner(User owner);
+    void deleteLoanById(Long id);
 }
 
 

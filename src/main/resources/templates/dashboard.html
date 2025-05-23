@@ -277,7 +277,7 @@
     <div class="nav-links">
         <a href="/dashboard">Dashboard</a>
         <a href="/tools">Cadastrados</a>
-        <a href="/emprestimos">Empréstimos</a>
+        <a href="/loans/my" class="btn-ver-emprestimos">Meus Empréstimos</a>
     </div>
 
     <div class="user-icon">
@@ -314,7 +314,7 @@
     </div>
 
     <ul class="tool-pills">
-        <li th:each="tool : ${otherTools}">
+        <li th:each="tool : ${toolsFromOthers}">
             <span class="pill tool" th:text="${tool.name}">Nome da ferramenta</span>
             <span class="pill owner" th:text="${tool.owner.name}">Proprietário</span>
             <form th:action="@{/loans/create}" method="post" style="margin-left:auto;">
@@ -323,8 +323,6 @@
             </form>
         </li>
     </ul>
-
-
 
     <h2>Cadastrar nova ferramenta</h2>
     <form th:action="@{/tools}" method="post" th:object="${newTool}">

@@ -45,4 +45,16 @@ public class ToolServiceImpl extends BaseServiceImpl<Tool, Long> implements Tool
         return toolRepository.save(tool);
     }
 
+    @Override
+    public List<Tool> getAvailableToolsFromOtherUsers(User currentUser) {
+        return toolRepository.findByOwnerNotAndAvailableTrue(currentUser);
+    }
+
+    @Override
+    public List<Tool> findByOwnerNotAndAvailableTrue(User user) {
+        return toolRepository.findByOwnerNotAndAvailableTrue(user);
+    }
+
+
+
 }

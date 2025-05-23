@@ -6,7 +6,10 @@ import com.fesa.sharetools.Model.User;
 import com.fesa.sharetools.Repository.LoanRepository;
 import com.fesa.sharetools.Repository.ToolRepository;
 import com.fesa.sharetools.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,8 +48,7 @@ public class LoanServiceImpl implements LoanService {
         toolService.save(tool);
     }
 
-
-    @Override
+    /*@Override
     public List<Loan> getLoansByBorrower(Long userId) {
         User borrower = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -58,13 +60,46 @@ public class LoanServiceImpl implements LoanService {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return loanRepository.findByOwner(owner);
+    }*/
+
+    @Override
+    public List<Loan> findActiveLoansByBorrower(User borrower) {
+        return loanRepository.findByBorrowerAndReturnDateIsNull(borrower);
     }
 
     @Override
     public void returnLoan(Long loanId) {
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
-        loanRepository.delete(loan);
-    }
-}
+        Loan loan = loanRepository.findById(loanId).orElseThrow();
+        Tool tool = loan.getTool();
 
+        loan.setReturnDate(LocalDate.now());
+        tool.setAvailable(true);
+
+        toolRepository.save(tool);
+        loanRepository.save(loan);
+    }
+
+    @Override
+    public List<Loan> getLoansByBorrower(User borrower) {
+        return loanRepository.findByBorrower(borrower);
+    }
+
+    @Override
+    public List<Loan> getLoansByOwner(User owner) {
+        return loanRepository.findByOwner(owner);
+    }
+
+    @Override
+    @Transactional
+    public void deleteLoanById(Long id) {
+        Loan loan = loanRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+
+        Tool tool = loan.getTool();
+        tool.setAvailable(true);
+        toolRepository.save(tool);
+
+        loanRepository.deleteById(id);
+    }
+
+
+}

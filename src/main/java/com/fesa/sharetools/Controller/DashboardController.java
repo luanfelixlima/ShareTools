@@ -28,12 +28,13 @@ public class DashboardController {
     public String dashboard(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
 
+        List<Tool> toolsFromOthers = toolService.getAvailableToolsFromOtherUsers(user);
+        model.addAttribute("toolsFromOthers", toolsFromOthers);
+
         List<Tool> userTools = toolService.findByOwner(user);
-        List<Tool> otherTools = toolService.findAllExceptOwner(user);
+        model.addAttribute("userTools", userTools);
 
         model.addAttribute("user", user);
-        model.addAttribute("userTools", userTools);
-        model.addAttribute("otherTools", otherTools);
         model.addAttribute("newTool", new Tool());
 
         return "dashboard";
@@ -46,8 +47,6 @@ public class DashboardController {
         newTool.setOwner(user);
         toolService.save(newTool);
 
-        //return "redirect:/";
         return "redirect:/dashboard";
-
     }
 }
