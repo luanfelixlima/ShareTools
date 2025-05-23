@@ -2,23 +2,42 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Usuários - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --roxo: #4B1F81;
+            --roxo-escuro: #36175E;
+            --amarelo: #F1C40F;
+            --amarelo-hover: #F39C12;
+            --cinza-claro: #f4f4f9; /* Adjusted for body background */
+            --texto: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
-            background-color: #f4f4f9;
+            background-color: var(--cinza-claro);
+            color: var(--texto); /* Apply text color to body */
         }
 
         header {
-            background-color: #6a1b9a; /* Roxo escuro */
+            background-color: var(--roxo-escuro); /* Darker purple for header */
             color: white;
             padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
         }
 
         .logo {
@@ -35,32 +54,53 @@
         .user-icon {
             position: relative;
             cursor: pointer;
+            display: flex; /* Use flex to align icon and text */
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+            font-weight: 600; /* Make username bold */
         }
 
         .user-icon span {
-            font-size: 1.5rem;
+            font-size: 1rem; /* Adjust font size for better fit */
+            color: white; /* Ensure text is white */
+        }
+
+        .user-icon::before {
+            content: "👤"; /* Emoji icon */
+            font-size: 1.5rem; /* Size of the emoji icon */
         }
 
         .user-dropdown {
-            display: none;
+            /* Removed display: none; to allow transitions */
             position: absolute;
             right: 0;
             top: 60px;
             background-color: white;
-            color: #333;
+            color: var(--texto);
             padding: 10px;
             border-radius: 6px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             min-width: 120px;
             z-index: 100;
+            opacity: 0; /* Start hidden for transition */
+            pointer-events: none; /* Disable interaction when hidden */
+            transform: translateY(10px); /* Start slightly below */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .user-dropdown.show { /* Class added by JS for showing */
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
         }
 
         .user-dropdown a {
             display: block;
             padding: 8px 12px;
-            color: #333;
+            color: var(--texto); /* Use text color variable */
             text-decoration: none;
             border-radius: 4px;
+            transition: background-color 0.2s ease;
         }
 
         .user-dropdown a:hover {
@@ -68,67 +108,143 @@
         }
 
         main {
-            max-width: 1000px;
+            max-width: 1200px; /* Increased max-width for table */
             margin: 40px auto;
             background-color: white;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: #6a1b9a;
+            color: var(--roxo-escuro);
+            font-size: 2rem;
+        }
+
+        /* Search and Filter Container */
+        .filter-container {
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            justify-content: center; /* Center items for better aesthetics */
+        }
+
+        .filter-container label {
+            font-weight: 600;
+            color: var(--roxo);
+            white-space: nowrap;
+        }
+
+        .filter-container input[type="text"] {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--roxo);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            max-width: 400px; /* Limit max width for search input */
+        }
+
+        .filter-container input[type="text"]:focus {
+            border-color: var(--amarelo);
+            box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
+            outline: none;
+        }
+
+        /* Table Responsive Wrapper */
+        .table-responsive {
+            overflow-x: auto; /* Enables horizontal scrolling for small screens */
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 700px; /* Minimum width to prevent excessive squeezing on small screens */
+            table-layout: fixed; /* Ensures columns respect defined widths */
         }
 
         table thead {
-            background-color: #f1c40f; /* Amarelo vibrante */
-            color: #2c3e50;
+            background-color: var(--amarelo); /* Yellow header */
+            color: var(--roxo-escuro); /* Dark purple text */
         }
 
         table th, table td {
-            padding: 12px;
+            padding: 12px 15px; /* Increased padding for better spacing */
             border: 1px solid #ddd;
-            text-align: center;
+            text-align: left; /* Align text to left for better readability */
+            word-wrap: break-word; /* Prevents long words from breaking layout */
+            vertical-align: middle; /* Vertically align content in cells */
+        }
+
+        table th {
+            font-weight: 700; /* Bolder header text */
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Column Widths - Adjusted ID and Ações columns */
+        table th:nth-child(1), table td:nth-child(1) { width: 8%; /* ID - Increased */ }
+        table th:nth-child(2), table td:nth-child(2) { width: 25%; /* Nome */ }
+        table th:nth-child(3), table td:nth-child(3) { width: 30%; /* E-mail */ }
+        table th:nth-child(4), table td:nth-child(4) { width: 12%; /* Telefone */ }
+        table th:nth-child(5), table td:nth-child(5) { width: 10%; /* Cargo */ }
+        table th:nth-child(6), table td:nth-child(6) { width: 15%; /* Ações - Retained */ }
+
+        .actions {
+            white-space: nowrap; /* Prevent buttons from wrapping */
+            text-align: center; /* Center action buttons */
         }
 
         .actions a {
-            padding: 6px 12px;
-            margin: 2px;
+            padding: 8px 12px; /* Increased padding */
+            margin: 0 4px; /* Space between buttons */
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 0.85rem; /* Slightly smaller font for buttons */
         }
 
         .edit-btn {
-            background-color: #6a1b9a;
+            background-color: var(--roxo); /* Use main purple for edit */
             color: white;
         }
 
         .delete-btn {
-            background-color: #e74c3c;
+            background-color: #e74c3c; /* Red for delete */
             color: white;
         }
 
         .edit-btn:hover {
-            background-color: #4a148c;
+            background-color: var(--roxo-escuro); /* Darker purple on hover */
+            transform: translateY(-2px);
         }
 
         .delete-btn:hover {
-            background-color: #c0392b;
+            background-color: #c0392b; /* Darker red on hover */
+            transform: translateY(-2px);
         }
 
         .h2-btn {
-            background-color: #f1c40f;
-            color: #2c3e50;
+            background-color: var(--amarelo);
+            color: var(--roxo-escuro);
             padding: 8px 16px;
             border: none;
             border-radius: 8px;
@@ -139,9 +255,50 @@
         }
 
         .h2-btn:hover {
-            background-color: #d4ac0d;
+            background-color: var(--amarelo-hover);
         }
 
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2rem;
+            color: #777;
+            background-color: #fdfdfd;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                padding: 16px 20px;
+            }
+            main {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-container input[type="text"] {
+                max-width: 100%;
+            }
+            /* Table min-width will force scroll on smaller screens */
+            table th, table td {
+                padding: 10px;
+            }
+            .actions a {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -155,21 +312,18 @@
     </div>
 
     <div style="display: flex; align-items: center;">
-        <div class="user-icon" id="userIcon" style="margin-left: 20px;">
-            <span>👤 <span th:if="${userLogado != null}" th:text="'👤 ' + ${#strings.split(userLogado.name, ' ')[0]}">👤 Usuário</span>
-            </span>
-            <div class="user-dropdown" id="userDropdown">
-                <a href="/users/logout">Sair</a>
-            </div>
+        <div class="user-icon" id="userIcon">
+            <span th:if="${userLogado != null}" th:text="${#strings.arraySplit(userLogado.name, ' ')[0]}">Usuário</span>
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+            <a href="/users/logout">Sair</a>
         </div>
     </div>
-
 </header>
 
 <main>
     <h2>Gestão de Usuários</h2>
 
-    <!-- Mensagens de feedback -->
     <div th:if="${error}" style="background-color: #f8d7da; color: #721c24; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
         <p th:text="${error}"></p>
     </div>
@@ -178,59 +332,149 @@
         <p th:text="${success}"></p>
     </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Telefone</th>
-            <th>Cargo (Role)</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.name}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.phone}"></td>
-            <td th:text="${user.role.name}"></td>
-            <td class="actions">
-                <a th:href="@{'/admin/users/edit/' + ${user.id}}" class="edit-btn">Editar</a>
-                <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="delete-btn"
-                   onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="filter-container">
+        <label for="userSearch">Filtrar por Nome ou Email:</label>
+        <input type="text" id="userSearch" placeholder="Digite para buscar..." onkeyup="filterUsers()">
+    </div>
+
+    <div class="table-responsive">
+        <table id="userTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Cargo</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(users)}" class="no-initial-users">
+                <td colspan="6" class="no-results">Nenhum usuário cadastrado.</td>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phone ?: 'N/A'}"></td>
+                <td th:text="${user.role.name}"></td>
+                <td class="actions">
+                    <a th:href="@{'/admin/users/edit/' + ${user.id}}" class="edit-btn">Editar</a>
+                    <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="delete-btn"
+                       onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
+                </td>
+            </tr>
+            <tr id="noFilterResultsRow" class="no-results" style="display: none;">
+                <td colspan="6">Nenhum usuário encontrado com este filtro.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <script>
+    // User dropdown logic
     const userIcon = document.getElementById('userIcon');
-    const dropdown = document.getElementById('userDropdown');
+    const userDropdown = document.getElementById('userDropdown');
     let hideTimeout;
 
-    userIcon.addEventListener('mouseenter', () => {
+    function showDropdown() {
         clearTimeout(hideTimeout);
-        dropdown.style.display = 'block';
-    });
+        userDropdown.classList.add('show');
+    }
 
-    userIcon.addEventListener('mouseleave', () => {
+    function hideDropdownWithDelay() {
         hideTimeout = setTimeout(() => {
-            dropdown.style.display = 'none';
-        }, 1000); // 1 segundo
+            userDropdown.classList.remove('show');
+        }, 300); // Shorter delay for hiding
+    }
+
+    userIcon.addEventListener('mouseenter', showDropdown);
+    userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
+    userDropdown.addEventListener('mouseenter', showDropdown);
+    userDropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+
+    // Filter users logic
+    function filterUsers() {
+        const input = document.getElementById('userSearch');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('userTable');
+        const tbody = table.querySelector('tbody');
+        const rows = tbody.getElementsByTagName('tr');
+        let foundResults = 0; // Changed to count visible rows
+
+        // Get the dynamically created no results row for filtered results
+        const noFilterResultsRow = document.getElementById('noFilterResultsRow');
+        const initialNoUsersRow = table.querySelector('.no-initial-users');
+
+        // Loop through all data rows
+        for (let i = 0; i < rows.length; i++) {
+            // Skip the special message rows from being processed as user data
+            if (rows[i].classList.contains('no-initial-users') || rows[i].id === 'noFilterResultsRow') {
+                rows[i].style.display = 'none'; // Ensure these are hidden by default in the loop
+                continue; // Skip this row in the filtering logic
+            }
+
+            const nameTd = rows[i].getElementsByTagName('td')[1]; // Nome column
+            const emailTd = rows[i].getElementsByTagName('td')[2]; // E-mail column
+
+            if (nameTd || emailTd) {
+                const nameText = nameTd ? nameTd.textContent || nameTd.innerText : '';
+                const emailText = emailTd ? emailTd.textContent || emailTd.innerText : '';
+
+                if (nameText.toLowerCase().includes(filter) || emailText.toLowerCase().includes(filter)) {
+                    rows[i].style.display = ''; // Show row
+                    foundResults++; // Increment counter for visible rows
+                } else {
+                    rows[i].style.display = 'none'; // Hide row
+                }
+            }
+        }
+
+        // Handle the "no results" message for filtering
+        if (foundResults === 0) {
+            noFilterResultsRow.style.display = ''; // Show "Nenhum usuário encontrado com este filtro."
+        } else {
+            noFilterResultsRow.style.display = 'none'; // Hide it if results are found
+        }
+
+        // Ensure the initial "Nenhum usuário cadastrado." message is hidden if filter is active
+        if (initialNoUsersRow && filter.length > 0) {
+            initialNoUsersRow.style.display = 'none';
+        } else if (initialNoUsersRow && filter.length === 0 && foundResults === 0) {
+             // If filter is empty and no users, show initial message
+            initialNoUsersRow.style.display = '';
+        }
+    }
+
+    // Ensure the initial "Nenhum usuário cadastrado." message and filter message are handled correctly on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const table = document.getElementById('userTable');
+        const initialNoUsersRow = table.querySelector('.no-initial-users');
+        const noFilterResultsRow = document.getElementById('noFilterResultsRow');
+        const actualUserRows = table.querySelectorAll('tbody tr:not(.no-initial-users):not(#noFilterResultsRow)');
+
+        // If there are actual user rows, hide the initial "no users" message
+        if (actualUserRows.length > 0) {
+            if (initialNoUsersRow) {
+                initialNoUsersRow.style.display = 'none';
+            }
+            // Ensure the filter results message is hidden on initial load if there are users
+            if (noFilterResultsRow) {
+                noFilterResultsRow.style.display = 'none';
+            }
+        } else {
+            // If no actual user rows, ensure the initial message is shown and filter message is hidden
+            if (initialNoUsersRow) {
+                initialNoUsersRow.style.display = '';
+            }
+            if (noFilterResultsRow) {
+                noFilterResultsRow.style.display = 'none';
+            }
+        }
     });
 
-    dropdown.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimeout);
-    });
-
-    dropdown.addEventListener('mouseleave', () => {
-        hideTimeout = setTimeout(() => {
-            dropdown.style.display = 'none';
-        }, 1000);
-    });
 </script>
 
 </body>

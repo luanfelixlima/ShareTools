@@ -211,6 +211,36 @@
         background: none;
         box-shadow: none;
     }
+
+    /* Estilos para o balão de ausência de registros */
+    .empty-state-message {
+        background-color: #ffffff; /* White background */
+        border: 1px solid var(--amarelo); /* Yellow border */
+        border-radius: 8px; /* Rounded corners */
+        padding: 20px; /* Ample padding */
+        text-align: center; /* Centered text */
+        margin-top: 20px; /* Space from the title */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        color: var(--texto); /* Default text color */
+        font-size: 1.1rem; /* Slightly larger font */
+        line-height: 1.6; /* Better line spacing */
+    }
+
+    .empty-state-message p {
+        margin-bottom: 10px; /* Space below paragraph */
+    }
+
+    .empty-state-message .cta-link {
+        color: var(--roxo); /* Purple color for the link */
+        font-weight: bold;
+        text-decoration: none; /* No underline */
+        transition: color 0.3s ease;
+    }
+
+    .empty-state-message .cta-link:hover {
+        color: var(--amarelo-hover); /* Hover color for the link */
+        text-decoration: underline; /* Underline on hover */
+    }
   </style>
 
 </head>
@@ -232,7 +262,7 @@
   <h1>Empréstimos</h1>
 
   <h2>Ferramentas que você pegou emprestado</h2>
-  <ul class="tool-list">
+  <ul class="tool-list" th:if="${not #lists.isEmpty(loansBorrowed)}">
     <li th:each="loan : ${loansBorrowed}">
       <div class="tool-card">
         <h3 th:text="${loan.tool.name}">Nome</h3>
@@ -245,13 +275,16 @@
           <input type="hidden" name="loanId" th:value="${loan.id}" />
           <button type="submit" class="btn-devolver">Devolver</button>
         </form>
-
       </div>
     </li>
   </ul>
+  <div class="empty-state-message" th:if="${#lists.isEmpty(loansBorrowed)}">
+    <p>Não há ferramentas a serem devolvidas.</p>
+    <p><a th:href="@{/dashboard}" class="cta-link">Pegue emprestado agora!</a></p>
+  </div>
 
-  <h2>Ferramentas que você emprestou</h2>
-  <ul class="tool-list">
+  <h2><br>Ferramentas que você emprestou</h2>
+  <ul class="tool-list" th:if="${not #lists.isEmpty(loansLent)}">
     <li th:each="loan : ${loansLent}">
       <div class="tool-card">
         <h3 th:text="${loan.tool.name}">Nome</h3>
@@ -268,6 +301,9 @@
       </div>
     </li>
   </ul>
+  <div class="empty-state-message" th:if="${#lists.isEmpty(loansLent)}">
+    <p>Você ainda não emprestou nenhuma ferramenta.</p>
+  </div>
 </div>
 <script>
   const userIcon = document.querySelector('.user-icon');
