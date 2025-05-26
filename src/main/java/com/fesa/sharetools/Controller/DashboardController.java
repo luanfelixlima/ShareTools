@@ -29,24 +29,29 @@ public class DashboardController {
         User user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
 
         List<Tool> toolsFromOthers = toolService.getAvailableToolsFromOtherUsers(user);
-        model.addAttribute("toolsFromOthers", toolsFromOthers);
-
         List<Tool> userTools = toolService.findByOwner(user);
-        model.addAttribute("userTools", userTools);
 
+        model.addAttribute("toolsFromOthers", toolsFromOthers);
+        model.addAttribute("userTools", userTools);
         model.addAttribute("user", user);
-        model.addAttribute("newTool", new Tool());
 
         return "dashboard";
     }
 
-    @PostMapping("/tools")
+    @GetMapping("/cadastros")
+    public String showCadastroPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
+        model.addAttribute("user", user);
+        model.addAttribute("newTool", new Tool());
+        return "cadastros";
+    }
+
+    /*@PostMapping("/tools")
     public String createTool(@ModelAttribute Tool newTool, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
-
         newTool.setOwner(user);
         toolService.save(newTool);
-
         return "redirect:/dashboard";
-    }
+    }*/
 }
+

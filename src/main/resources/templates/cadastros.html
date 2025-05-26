@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Ferramentas - ShareTools</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #4B1F81;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background-color: #4B1F81;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #F1C40F;
+            color: #4B1F81;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-link a {
+            color: #4B1F81;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cadastro de Ferramentas</h1>
+
+<form th:action="@{/tools}" method="post" th:object="${newTool}">
+    <label for="name">Nome da Ferramenta</label>
+    <input type="text" id="name" th:field="*{name}" required />
+
+    <label for="description">Descrição</label>
+    <textarea id="description" th:field="*{description}" rows="4"></textarea>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
+<div class="back-link">
+    <a href="/dashboard">← Voltar para o Dashboard</a>
+</div>
+
+</body>
+</html>

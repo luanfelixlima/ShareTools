@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Editar Ferramenta - ShareTools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --roxo: #4B1F81;
+            --roxo-escuro: #36175E;
+            --amarelo: #F1C40F;
+            --amarelo-hover: #F39C12;
+            --cinza-claro: #f4f6f8;
+            --texto: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--texto);
+            margin-top: 80px; /* Space for fixed header */
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--roxo);
+            color: #ECF0F1;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.8);
+            z-index: 1000;
+        }
+
+        .nav-links a {
+            margin-right: 20px;
+            color: #ECF0F1;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--amarelo);
+        }
+
+        .user-icon {
+            position: relative;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .user-icon span {
+            font-size: 16px;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            color: var(--texto);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            text-align: left;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .user-icon:hover .user-dropdown,
+        .user-dropdown:hover {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        main {
+            max-width: 600px; /* Adjusted max-width for the form */
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            color: var(--roxo);
+            margin-bottom: 25px;
+            text-align: center; /* Center the heading */
+        }
+
+        form {
+            background-color: white;
+            padding: 30px; /* Increased padding */
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px; /* Increased margin */
+            font-weight: 600;
+            color: var(--roxo-escuro);
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px; /* Increased padding */
+            margin-bottom: 20px; /* Increased margin */
+            border: 1px solid var(--roxo);
+            border-radius: 8px;
+            font-size: 16px; /* Increased font size */
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--amarelo);
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto; /* Override 100% width */
+            margin-right: 10px;
+            transform: scale(1.2); /* Make checkbox slightly larger */
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: normal; /* Less bold for checkbox label */
+        }
+
+
+        button {
+            background-color: var(--roxo);
+            color: #ECF0F1;
+            padding: 12px 20px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            width: 100%; /* Full width button */
+        }
+
+        button:hover {
+            background-color: var(--amarelo);
+            color: var(--roxo);
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--roxo);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: var(--amarelo-hover);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/loans/my" class="btn-ver-emprestimos">Meus Empréstimos</a>
+    </div>
+
+    <div class="user-icon">
+        <span th:text="'👤 ' + ${#strings.arraySplit(user.name, ' ')[0]}">👤 Usuário</span>
+        <div class="user-dropdown">
+            <a href="/users/logout">Sair</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h1>Editar Ferramenta</h1>
+
+    <form th:action="@{/tools/update}" th:object="${tool}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="name">Nome da Ferramenta:</label>
+        <input type="text" id="name" th:field="*{name}" required />
+
+        <label for="description">Descrição:</label>
+        <textarea id="description" th:field="*{description}" rows="6" required></textarea>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="available" th:field="*{available}" />
+            <label for="available">Disponível para Empréstimo</label>
+        </div>
+
+        <button type="submit">Atualizar Ferramenta</button>
+    </form>
+
+    <a href="/dashboard" class="back-button">Voltar para o Dashboard</a>
+</main>
+
+<script>
+    // Dropdown de usuário (reused from dashboard)
+    const userIcon = document.querySelector('.user-icon');
+    const dropdown = document.querySelector('.user-dropdown');
+    let hideTimeout;
+
+    function showDropdown() {
+        clearTimeout(hideTimeout);
+        dropdown.style.display = 'block';
+        dropdown.style.opacity = '1';
+        dropdown.style.pointerEvents = 'auto';
+        dropdown.style.transform = 'translateY(0)';
+    }
+
+    function hideDropdownWithDelay() {
+        hideTimeout = setTimeout(() => {
+            dropdown.style.opacity = '0';
+            dropdown.style.pointerEvents = 'none';
+            dropdown.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                if (dropdown.style.opacity === '0') {
+                    dropdown.style.display = 'none';
+                }
+            }, 300);
+        }, 300);
+    }
+
+    userIcon.addEventListener('mouseenter', showDropdown);
+    userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
+    dropdown.addEventListener('mouseenter', showDropdown);
+    dropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+</script>
+
+</body>
+</html>

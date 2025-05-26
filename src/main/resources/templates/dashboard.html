@@ -101,6 +101,10 @@
             gap: 12px;
             margin-bottom: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: white;
+            padding: 12px 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         .tool-pills li:hover {
@@ -108,42 +112,16 @@
             box-shadow: 0 4px 12px rgba(75, 31, 129, 0.15);
         }
 
-        /* --- Estilos para a legenda --- */
-        .pill-legend {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px; /* Aumentei um pouco a margem para separar da lista principal */
-            align-items: center;
-            font-size: 0.8rem; /* Tamanho de fonte um pouco menor para a legenda em si */
-            color: #777; /* Um cinza mais claro para o texto da legenda */
-            font-weight: 400;
-            line-height: 1.4;
-            padding: 8px 0; /* Padding vertical para dar espaço */
-            border-top: 1px solid #ddd; /* Borda superior sutil */
-            border-bottom: 1px solid #ddd; /* Borda inferior sutil */
-            background-color: #dbdbdb; /* Fundo levemente diferente para destacá-la como uma seção */
-            border-radius: 4px; /* Leve arredondamento */
-            padding-left: 10px; /* Um pouco de padding à esquerda */
+        /* --- Estilos para os ícones --- */
+        .icon {
+            display: inline-block;
+            vertical-align: middle;
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            fill: currentColor; /* Usa a cor do texto pai */
         }
-
-        /* Estilos específicos para os .pill DENTRO da legenda */
-        .pill-legend .pill {
-            padding: 4px 8px; /* Reduzi o padding para as "pills" da legenda */
-            border-radius: 12px; /* Reduzi o border-radius para ficarem menores */
-            font-size: 0.75rem; /* Reduzi o tamanho da fonte para as "pills" da legenda */
-            font-weight: 500; /* Levemente menos negrito */
-        }
-
-        .pill-legend .pill.tool {
-            background-color: #4B1F81; /* Cor de fundo mais clara para a "pill" da ferramenta na legenda */
-            color: #ffffff; /* Cor de texto mais escura para melhor legibilidade */
-        }
-
-        .pill-legend .pill.owner {
-            background-color: #F8E7A2; /* Cor de fundo mais clara para a "pill" do proprietário na legenda */
-            color: #4B1F81; /* Cor de texto mais escura para melhor legibilidade */
-        }
-        /* --- Fim dos estilos para a legenda --- */
+        /* --- Fim dos estilos para os ícones --- */
 
         .pill {
             padding: 10px 16px;
@@ -152,19 +130,21 @@
             font-size: 0.95rem;
             white-space: nowrap;
             transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center; /* Alinha o ícone e o texto verticalmente */
         }
 
         .pill.tool {
-            background-color: #4B1F81;
-            color: #ECF0F1;
+            background-color: var(--roxo);
+            color: var(--cinza-claro);
         }
 
         .pill.owner {
-            background-color: #F1C40F;
-            color: #4B1F81;
+            background-color: var(--amarelo);
+            color: var(--roxo);
         }
 
-        .btn-emprestimo {
+        .btn-emprestimo, .btn-editar {
             background-color: var(--amarelo);
             color: var(--roxo);
             font-weight: 600;
@@ -174,9 +154,13 @@
             cursor: pointer;
             font-size: 0.85rem;
             transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none; /* Para o botão editar que é um link */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-emprestimo:hover {
+        .btn-emprestimo:hover, .btn-editar:hover {
             background-color: var(--amarelo-hover);
             transform: scale(1.05);
         }
@@ -255,7 +239,7 @@
 
         button {
             background-color: var(--roxo);
-            color: #ECF0F1;
+            color: var(--cinza-claro);
             padding: 12px 20px;
             border: none;
             font-weight: 600;
@@ -269,6 +253,100 @@
             background-color: var(--amarelo);
             color: var(--roxo);
         }
+
+        /* Floating Action Button (FAB) */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+
+        .fab {
+            background-color: var(--roxo);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+
+        .fab:hover {
+            background-color: var(--roxo-escuro);
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1001; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%; /* Could be adjusted */
+            max-width: 600px; /* Max width for larger screens */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            color: var(--roxo);
+            margin-bottom: 20px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .modal form {
+            background-color: transparent;
+            box-shadow: none;
+            margin-top: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -276,8 +354,7 @@
 <header>
     <div class="nav-links">
         <a href="/dashboard">Dashboard</a>
-        <a href="/tools">Cadastrados</a>
-        <a href="/loans/my" class="btn-ver-emprestimos">Meus Empréstimos</a>
+        <a href="/loans/my" class="btn-ver-emprestimos">Meus empréstimos</a>
     </div>
 
     <div class="user-icon">
@@ -297,46 +374,71 @@
         <p th:text="${error}"></p>
     </div>
 
-    <h1>Bem-vindo, <span th:text="${user.name}">Usuário</span></h1>
-
-    <h2>Suas Ferramentas</h2>
-    <ul>
+    <h2>Suas ferramentas</h2>
+    <ul class="tool-pills">
         <li th:each="tool : ${userTools}">
-            <span th:text="${tool.name}">Nome da ferramenta</span>
-            - <span th:text="${tool.description}">Descrição</span>
+    <span class="pill tool">
+        <svg class="icon" viewBox="0 0 24 24">
+            <path d="M2 19.63L13.43 8.2L12.72 7.5L14.14 6.07L12 3.89C13.2 2.7 15.09 2.7 16.27 3.89L20.11 7.73C21.3 8.91 21.3 10.8 20.11 12L17.93 9.86L16.5 11.28L15.8 10.57L4.37 22H2V19.63Z"/>
+        </svg>
+        <span th:text="${tool.name} + ' - ' + ${tool.description}">Nome da ferramenta - Descrição da ferramenta</span>
+    </span>
+            <a th:href="@{/tools/edit/{id}(id=${tool.id})}" class="btn-editar" style="margin-left:auto;">Editar</a>
+        </li>
+        <li th:if="${userTools.isEmpty()}">
+            <p>Você ainda não cadastrou nenhuma ferramenta. Que tal adicionar uma agora?</p>
         </li>
     </ul>
 
     <h2>Ferramentas disponíveis de outros usuários</h2>
-    <div class="pill-legend">
-        <span class="pill tool">Nome da Ferramenta</span>
-        <span class="pill owner">Proprietário</span>
-    </div>
-
     <ul class="tool-pills">
         <li th:each="tool : ${toolsFromOthers}">
-            <span class="pill tool" th:text="${tool.name}">Nome da ferramenta</span>
-            <span class="pill owner" th:text="${tool.owner.name}">Proprietário</span>
+            <span class="pill tool">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M2 19.63L13.43 8.2L12.72 7.5L14.14 6.07L12 3.89C13.2 2.7 15.09 2.7 16.27 3.89L20.11 7.73C21.3 8.91 21.3 10.8 20.11 12L17.93 9.86L16.5 11.28L15.8 10.57L4.37 22H2V19.63Z"/>
+                </svg>
+                <span th:text="${tool.name}">Nome da ferramenta</span>
+            </span>
+            <span class="pill owner">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
+                </svg>
+                <span th:text="${tool.owner.name}">Proprietário</span>
+            </span>
             <form th:action="@{/loans/create}" method="post" style="margin-left:auto;">
                 <input type="hidden" name="toolId" th:value="${tool.id}" />
                 <button type="submit" class="btn-emprestimo">Solicitar</button>
             </form>
         </li>
+        <li th:if="${toolsFromOthers.isEmpty()}">
+            <p>Nenhuma ferramenta disponível para empréstimo no momento.</p>
+        </li>
     </ul>
 
-    <h2>Cadastrar nova ferramenta</h2>
-    <form th:action="@{/tools}" method="post" th:object="${newTool}">
-        <label for="name">Nome</label>
-        <input type="text" id="name" th:field="*{name}" required />
-
-        <label for="description">Descrição</label>
-        <textarea id="description" th:field="*{description}"></textarea>
-
-        <button type="submit">Cadastrar</button>
-    </form>
 </main>
 
+<div class="fab-container">
+    <button class="fab" id="openModalBtn" title="Cadastrar nova ferramenta">+</button>
+</div>
+
+<div id="toolModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Cadastrar nova ferramenta</h2>
+        <form th:action="@{/tools}" method="post">
+            <label for="name">Nome da ferramenta:</label>
+            <input type="text" id="name" name="name" required />
+
+            <label for="description">Descrição:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+</div>
+
 <script>
+    // Dropdown de usuário
     const userIcon = document.querySelector('.user-icon');
     const dropdown = document.querySelector('.user-dropdown');
     let hideTimeout;
@@ -354,13 +456,39 @@
             dropdown.style.opacity = '0';
             dropdown.style.pointerEvents = 'none';
             dropdown.style.transform = 'translateY(10px)';
-        }, 1000); // 1 segundo
+            // Give a small delay before actually hiding to allow transition to complete
+            setTimeout(() => {
+                if (dropdown.style.opacity === '0') {
+                    dropdown.style.display = 'none';
+                }
+            }, 300); // Matches CSS transition duration
+        }, 300); // 0.3 segundos, um pouco mais curto para uma sensação mais ágil
     }
 
     userIcon.addEventListener('mouseenter', showDropdown);
     userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
     dropdown.addEventListener('mouseenter', showDropdown);
     dropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+
+    // Modal de cadastro de ferramenta
+    const modal = document.getElementById('toolModal');
+    const openModalBtn = document.getElementById('openModalBtn');
+    const closeButton = document.querySelector('.close-button');
+
+    openModalBtn.addEventListener('click', () => {
+        modal.style.display = 'flex'; // Use flex to center content
+    });
+
+    closeButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close the modal if clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
 </script>
 
 </body>
