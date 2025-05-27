@@ -32,9 +32,9 @@ public class ToolController {
     @GetMapping("/list")
     public String listTools(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
-        List<Tool> tools = toolService.findAllExceptOwner(user); // Corrected: tools variable initialized here
+        List<Tool> tools = toolService.findAllExceptOwner(user);
         model.addAttribute("tools", tools);
-        return "tools_list";  // template HTML para listar ferramentas
+        return "tools_list";
     }
 
     // Endpoint para criar ferramenta
@@ -49,18 +49,10 @@ public class ToolController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erro ao cadastrar ferramenta: " + e.getMessage());
         }
-        return "redirect:/dashboard"; // Redirect to dashboard after creation
+        return "redirect:/dashboard";
     }
 
-    /**
-     * Endpoint para exibir o formulário de edição de uma ferramenta.
-     * Garante que apenas o proprietário da ferramenta possa acessá-la para edição.
-     * @param id O ID da ferramenta a ser editada.
-     * @param model O objeto Model para passar dados para a view.
-     * @param userDetails Os detalhes do usuário autenticado.
-     * @param redirectAttributes Usado para adicionar mensagens flash em caso de erro ou sucesso.
-     * @return O nome do template HTML para edição ou um redirecionamento para o dashboard.
-     */
+
     @GetMapping("/edit/{id}")
     public String showEditToolForm(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
         try {
@@ -76,48 +68,62 @@ public class ToolController {
             }
 
             model.addAttribute("tool", tool);
-            model.addAttribute("user", currentUser); // Adicionado: Passa o objeto 'user' para o modelo
+            model.addAttribute("user", currentUser);
 
-            return "edit-tool"; // Nome do template HTML para edição (edit-tool.html)
+            return "edit-tool";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/dashboard"; // Redireciona para o dashboard em caso de erro ou acesso negado
+            return "redirect:/dashboard";
         }
     }
 
-    /**
-     * Endpoint para processar a atualização de uma ferramenta.
-     * Garante que apenas o proprietário da ferramenta possa atualizá-la.
-     * @param tool O objeto Tool com os dados atualizados do formulário.
-     * @param userDetails Os detalhes do usuário autenticado.
-     * @param redirectAttributes Usado para adicionar mensagens flash em caso de erro ou sucesso.
-     * @return Um redirecionamento para o dashboard após a atualização.
-     */
+
     @PostMapping("/update")
     public String updateTool(@ModelAttribute Tool tool, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
         try {
             User currentUser = userService.findByEmail(userDetails.getUsername())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-            // Fetch the existing tool from the database to ensure we don't overwrite owner or other critical data
             Tool existingTool = toolService.findById(tool.getId())
                     .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada para atualização."));
 
-            // Security check: ensure the current user owns the tool being updated
             if (!existingTool.getOwner().getId().equals(currentUser.getId())) {
                 throw new AccessDeniedException("Você não tem permissão para atualizar esta ferramenta.");
             }
 
-            // Update only the allowed fields (name, description, available)
             existingTool.setName(tool.getName());
             existingTool.setDescription(tool.getDescription());
-            existingTool.setAvailable(tool.isAvailable()); // Assuming 'available' can also be edited
+            existingTool.setAvailable(tool.isAvailable());
 
-            toolService.save(existingTool); // Save the updated existing tool
+            toolService.save(existingTool);
             redirectAttributes.addFlashAttribute("success", "Ferramenta '" + existingTool.getName() + "' atualizada com sucesso!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erro ao atualizar ferramenta: " + e.getMessage());
         }
-        return "redirect:/dashboard"; // Redireciona para o dashboard após a atualização
+        return "redirect:/dashboard";
+    }
+
+
+    // Changed to @GetMapping to match the <a> tag behavior with onclick confirmation
+    @GetMapping("/delete/{id}")
+    public String deleteTool(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
+        try {
+            User currentUser = userService.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+            Tool toolToDelete = toolService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada para exclusão."));
+
+            // Security check: ensure the current user owns the tool
+            if (!toolToDelete.getOwner().getId().equals(currentUser.getId())) {
+                throw new AccessDeniedException("Você não tem permissão para excluir esta ferramenta.");
+            }
+
+            toolService.delete(id);
+            redirectAttributes.addFlashAttribute("success", "Ferramenta '" + toolToDelete.getName() + "' excluída com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erro ao excluir ferramenta: " + e.getMessage());
+        }
+        return "redirect:/dashboard";
     }
 }

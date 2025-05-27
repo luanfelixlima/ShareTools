@@ -13,6 +13,6 @@ public interface ToolService extends BaseService<Tool, Long> {
     Tool getById(Long id);
     Tool save(Tool tool);
     List<Tool> findByOwnerNotAndAvailableTrue(User user);
-
+    void delete(Long id);
     List<Tool> getAvailableToolsFromOtherUsers(User currentUser);
 }

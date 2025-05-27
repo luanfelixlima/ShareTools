@@ -144,7 +144,8 @@
             color: var(--roxo);
         }
 
-        .btn-emprestimo, .btn-editar {
+        /* Adjusted styles for delete button to match the user-admin.html example */
+        .btn-emprestimo, .btn-editar, .delete-btn { /* Changed .btn-excluir to .delete-btn for consistency with admin-users.html */
             background-color: var(--amarelo);
             color: var(--roxo);
             font-weight: 600;
@@ -154,7 +155,7 @@
             cursor: pointer;
             font-size: 0.85rem;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            text-decoration: none; /* Para o botão editar que é um link */
+            text-decoration: none; /* For the edit button which is a link */
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -163,6 +164,16 @@
         .btn-emprestimo:hover, .btn-editar:hover {
             background-color: var(--amarelo-hover);
             transform: scale(1.05);
+        }
+
+        .delete-btn { /* Style specific for the delete button */
+            background-color: #e74c3c; /* Red */
+            color: white;
+            margin-left: 8px; /* Spacing between edit and delete */
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b; /* Darker red on hover */
         }
 
 
@@ -377,13 +388,19 @@
     <h2>Suas ferramentas</h2>
     <ul class="tool-pills">
         <li th:each="tool : ${userTools}">
-    <span class="pill tool">
-        <svg class="icon" viewBox="0 0 24 24">
-            <path d="M2 19.63L13.43 8.2L12.72 7.5L14.14 6.07L12 3.89C13.2 2.7 15.09 2.7 16.27 3.89L20.11 7.73C21.3 8.91 21.3 10.8 20.11 12L17.93 9.86L16.5 11.28L15.8 10.57L4.37 22H2V19.63Z"/>
-        </svg>
-        <span th:text="${tool.name} + ' - ' + ${tool.description}">Nome da ferramenta - Descrição da ferramenta</span>
-    </span>
-            <a th:href="@{/tools/edit/{id}(id=${tool.id})}" class="btn-editar" style="margin-left:auto;">Editar</a>
+            <span class="pill tool">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M2 19.63L13.43 8.2L12.72 7.5L14.14 6.07L12 3.89C13.2 2.7 15.09 2.7 16.27 3.89L20.11 7.73C21.3 8.91 21.3 10.8 20.11 12L17.93 9.86L16.5 11.28L15.8 10.57L4.37 22H2V19.63Z"/>
+                </svg>
+                <span th:text="${tool.name} + ' - ' + ${tool.description}">Nome da ferramenta - Descrição da ferramenta</span>
+            </span>
+            <div style="margin-left:auto; display:flex; align-items:center;">
+                <a th:href="@{/tools/edit/{id}(id=${tool.id})}" class="btn-editar">Editar</a>
+                <a th:href="@{/tools/delete/{id}(id=${tool.id})}" class="delete-btn"
+                   onclick="return confirm('Tem certeza que deseja excluir a ferramenta?')">
+                    Excluir
+                </a>
+            </div>
         </li>
         <li th:if="${userTools.isEmpty()}">
             <p>Você ainda não cadastrou nenhuma ferramenta. Que tal adicionar uma agora?</p>
@@ -423,7 +440,7 @@
 
 <div id="toolModal" class="modal">
     <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <span class="close-button" id="closeToolModal">&times;</span>
         <h2>Cadastrar nova ferramenta</h2>
         <form th:action="@{/tools}" method="post">
             <label for="name">Nome da ferramenta:</label>
@@ -456,13 +473,12 @@
             dropdown.style.opacity = '0';
             dropdown.style.pointerEvents = 'none';
             dropdown.style.transform = 'translateY(10px)';
-            // Give a small delay before actually hiding to allow transition to complete
             setTimeout(() => {
                 if (dropdown.style.opacity === '0') {
                     dropdown.style.display = 'none';
                 }
-            }, 300); // Matches CSS transition duration
-        }, 300); // 0.3 segundos, um pouco mais curto para uma sensação mais ágil
+            }, 300);
+        }, 300);
     }
 
     userIcon.addEventListener('mouseenter', showDropdown);
@@ -471,24 +487,26 @@
     dropdown.addEventListener('mouseleave', hideDropdownWithDelay);
 
     // Modal de cadastro de ferramenta
-    const modal = document.getElementById('toolModal');
+    const toolModal = document.getElementById('toolModal');
     const openModalBtn = document.getElementById('openModalBtn');
-    const closeButton = document.querySelector('.close-button');
+    const closeToolModalBtn = document.getElementById('closeToolModal');
 
     openModalBtn.addEventListener('click', () => {
-        modal.style.display = 'flex'; // Use flex to center content
+        toolModal.style.display = 'flex';
     });
 
-    closeButton.addEventListener('click', () => {
-        modal.style.display = 'none';
+    closeToolModalBtn.addEventListener('click', () => {
+        toolModal.style.display = 'none';
     });
 
-    // Close the modal if clicking outside the modal content
+    // Close tool modal if clicking outside
     window.addEventListener('click', (event) => {
-        if (event.target == modal) {
-            modal.style.display = 'none';
+        if (event.target == toolModal) {
+            toolModal.style.display = 'none';
         }
     });
+
+    // Removed all JavaScript related to the custom confirmation modal
 </script>
 
 </body>

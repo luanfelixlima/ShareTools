@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional; // Added Optional import
 
 @Service
 public class ToolServiceImpl extends BaseServiceImpl<Tool, Long> implements ToolService {
@@ -35,6 +36,11 @@ public class ToolServiceImpl extends BaseServiceImpl<Tool, Long> implements Tool
     }
 
     @Override
+    public Optional<Tool> findById(Long id) { // Added Optional return type
+        return toolRepository.findById(id);
+    }
+
+    @Override
     public Tool getById(Long id) {
         return toolRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ferramenta com id '" + id + "' não encontrada."));
@@ -55,6 +61,8 @@ public class ToolServiceImpl extends BaseServiceImpl<Tool, Long> implements Tool
         return toolRepository.findByOwnerNotAndAvailableTrue(user);
     }
 
-
-
+    @Override
+    public void delete(Long id) {
+        toolRepository.deleteById(id);
+    }
 }
