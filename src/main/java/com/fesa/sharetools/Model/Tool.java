@@ -31,4 +31,11 @@ public class Tool {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
+
+    // --- NEW: Transient field for active loan ---
+    @Transient // This annotation marks the field as not persistent in the database
+    @Getter
+    @Setter
+    private Loan currentLoan; // This will hold the active loan if one exists
+    // --- END NEW ---
 }

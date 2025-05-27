@@ -2,8 +2,10 @@ package com.fesa.sharetools.Controller;
 
 import com.fesa.sharetools.Model.Tool;
 import com.fesa.sharetools.Model.User;
+import com.fesa.sharetools.Model.Loan;
 import com.fesa.sharetools.Service.ToolService;
 import com.fesa.sharetools.Service.UserService;
+import com.fesa.sharetools.Service.LoanService;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,13 +24,14 @@ public class ToolController {
 
     private final ToolService toolService;
     private final UserService userService;
+    private final LoanService loanService;
 
-    public ToolController(ToolService toolService, UserService userService) {
+    public ToolController(ToolService toolService, UserService userService, LoanService loanService) {
         this.toolService = toolService;
         this.userService = userService;
+        this.loanService = loanService;
     }
 
-    // Exemplo de listar todas as ferramentas (exceto do usuário logado)
     @GetMapping("/list")
     public String listTools(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
@@ -52,7 +55,6 @@ public class ToolController {
         return "redirect:/dashboard";
     }
 
-
     @GetMapping("/edit/{id}")
     public String showEditToolForm(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
         try {
@@ -62,10 +64,14 @@ public class ToolController {
             Tool tool = toolService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada."));
 
-            // Security check: ensure the current user owns the tool
             if (!tool.getOwner().getId().equals(currentUser.getId())) {
                 throw new AccessDeniedException("Você não tem permissão para editar esta ferramenta.");
             }
+
+            // Usamos findActiveLoanByTool que agora retorna o empréstimo se ele existe na tabela Loan
+            Optional<Loan> activeLoan = loanService.findActiveLoanByTool(tool);
+            // Se encontrou um empréstimo (ou seja, está na tabela Loan), preenche currentLoan para o Thymeleaf
+            tool.setCurrentLoan(activeLoan.orElse(null));
 
             model.addAttribute("tool", tool);
             model.addAttribute("user", currentUser);
@@ -91,9 +97,21 @@ public class ToolController {
                 throw new AccessDeniedException("Você não tem permissão para atualizar esta ferramenta.");
             }
 
+            // --- Verificação de Lógica de Negócio para Ferramentas Emprestadas ---
+            // Verifica se a ferramenta está atualmente na tabela Loan (emprestada)
+            boolean isToolCurrentlyLoaned = loanService.isToolCurrentlyLoaned(existingTool);
+
+            // Se a ferramenta está emprestada E o usuário tenta marcá-la como disponível=true, impeça.
+            if (isToolCurrentlyLoaned && tool.isAvailable()) {
+                redirectAttributes.addFlashAttribute("error", "Não é possível editar a ferramenta '" + existingTool.getName() + "'. Pois ela está emprestada no momento.");
+                // Redireciona de volta para a página de edição para mostrar o erro no formulário.
+                return "redirect:/tools/edit/" + existingTool.getId();
+            }
+            // --- Fim da Verificação ---
+
             existingTool.setName(tool.getName());
             existingTool.setDescription(tool.getDescription());
-            existingTool.setAvailable(tool.isAvailable());
+            existingTool.setAvailable(tool.isAvailable()); // Atualiza o status 'available' apenas se permitido
 
             toolService.save(existingTool);
             redirectAttributes.addFlashAttribute("success", "Ferramenta '" + existingTool.getName() + "' atualizada com sucesso!");
@@ -103,8 +121,6 @@ public class ToolController {
         return "redirect:/dashboard";
     }
 
-
-    // Changed to @GetMapping to match the <a> tag behavior with onclick confirmation
     @GetMapping("/delete/{id}")
     public String deleteTool(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
         try {
@@ -114,7 +130,13 @@ public class ToolController {
             Tool toolToDelete = toolService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada para exclusão."));
 
-            // Security check: ensure the current user owns the tool
+            // Verifica se a ferramenta está atualmente na tabela Loan (emprestada) antes de permitir a exclusão
+            boolean isToolCurrentlyLoaned = loanService.isToolCurrentlyLoaned(toolToDelete);
+            if (isToolCurrentlyLoaned) {
+                redirectAttributes.addFlashAttribute("error", "Não é possível excluir a ferramenta '" + toolToDelete.getName() + "', pois ela está emprestada no momento.");
+                return "redirect:/dashboard";
+            }
+
             if (!toolToDelete.getOwner().getId().equals(currentUser.getId())) {
                 throw new AccessDeniedException("Você não tem permissão para excluir esta ferramenta.");
             }

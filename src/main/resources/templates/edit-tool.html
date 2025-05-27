@@ -138,6 +138,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+            position: relative; /* Needed for absolute positioning of message */
         }
 
         .checkbox-group input[type="checkbox"] {
@@ -149,6 +150,13 @@
         .checkbox-group label {
             margin-bottom: 0;
             font-weight: normal; /* Less bold for checkbox label */
+        }
+
+        .loaned-message {
+            color: #e74c3c; /* Red color for error message */
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-weight: 600;
         }
 
 
@@ -170,6 +178,11 @@
             color: var(--roxo);
         }
 
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
         .back-button {
             display: block;
             text-align: center;
@@ -182,6 +195,22 @@
 
         .back-button:hover {
             color: var(--amarelo-hover);
+        }
+
+        /* Message style for success/error alerts */
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .alert-success {
+            background-color:#DFF0D8;
+            color:#3C763D;
+        }
+        .alert-error {
+            background-color:#F2DEDE;
+            color:#A94442;
         }
     </style>
 </head>
@@ -204,6 +233,14 @@
 <main>
     <h1>Editar Ferramenta</h1>
 
+    <div th:if="${success}" class="alert alert-success">
+        <p th:text="${success}"></p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error">
+        <p th:text="${error}"></p>
+    </div>
+
     <form th:action="@{/tools/update}" th:object="${tool}" method="post">
         <input type="hidden" th:field="*{id}" />
 
@@ -214,12 +251,14 @@
         <textarea id="description" th:field="*{description}" rows="6" required></textarea>
 
         <div class="checkbox-group">
-            <input type="checkbox" id="available" th:field="*{available}" />
-            <label for="available">Disponível para Empréstimo</label>
+            <input type="checkbox" id="available" th:field="*{available}"
+                   th:disabled="${tool.currentLoan != null}" /> <label for="available">Disponível para Empréstimo</label>
+
+            <span th:if="${tool.currentLoan != null}" class="loaned-message"> Essa ferramenta está emprestada no momento.
+    </span>
         </div>
 
-        <button type="submit">Atualizar Ferramenta</button>
-    </form>
+        <button type="submit" th:disabled="${tool.currentLoan != null and tool.available}">Atualizar Ferramenta</button>    </form>
 
     <a href="/dashboard" class="back-button">Voltar para o Dashboard</a>
 </main>
@@ -254,7 +293,7 @@
     userIcon.addEventListener('mouseenter', showDropdown);
     userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
     dropdown.addEventListener('mouseenter', showDropdown);
-    dropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+    dropdown.addEventListener('mouseleave', hideTimeout);
 </script>
 
 </body>
