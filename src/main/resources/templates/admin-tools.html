@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Usuários - ShareTools</title>
+    <title>Gestão de Ferramentas - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* ... (Seu CSS existente, com as seguintes adições/modificações no final) ... */
+        /* ... (Seu CSS existente, com as mesmas adições/modificações do users.html) ... */
         :root {
             --roxo: #4B1F81;
             --roxo-escuro: #36175E;
@@ -30,7 +30,7 @@
             color: var(--texto);
         }
 
-header {
+        header {
             background-color: var(--roxo-escuro);
             color: white;
             padding: 16px 40px;
@@ -50,9 +50,9 @@ header {
             gap: 20px;
         }
 
-        /* Adicione esta nova regra para centralizar o logo no layout Grid */
         .header-center {
             grid-column: 2; /* Coloca no meio da segunda coluna */
+            /* Remove position: absolute e transform */
             display: flex; /* Mantém flex para o ícone e texto do logo */
             align-items: center;
             font-size: 24px;
@@ -69,6 +69,20 @@ header {
             justify-content: flex-end; /* Alinha os itens à direita */
         }
 
+        @media (max-width: 768px) {
+            header {
+                grid-template-columns: 1fr; /* Em telas pequenas, uma única coluna */
+                justify-items: center; /* Centraliza os itens na coluna */
+                padding: 16px 20px;
+                gap: 15px; /* Ajuste o gap para mobile */
+            }
+            .header-left, .header-right, .header-center {
+                grid-column: 1; /* Todos ocupam a única coluna */
+                width: 100%; /* Ocupa toda a largura */
+                justify-content: center; /* Centraliza o conteúdo dentro dos blocos */
+                text-align: center; /* Garante que o texto também se centralize */
+            }
+        }
 
         .logo {
             display: flex;
@@ -225,11 +239,11 @@ header {
         }
 
         table th:nth-child(1), table td:nth-child(1) { width: 8%; }
-        table th:nth-child(2), table td:nth-child(2) { width: 25%; }
-        table th:nth-child(3), table td:nth-child(3) { width: 30%; }
+        table th:nth-child(2), table td:nth-child(2) { width: 20%; }
+        table th:nth-child(3), table td:nth-child(3) { width: 28%; } /* Reduzido de 30% */
         table th:nth-child(4), table td:nth-child(4) { width: 12%; }
-        table th:nth-child(5), table td:nth-child(5) { width: 10%; }
-        table th:nth-child(6), table td:nth-child(6) { width: 15%; }
+        table th:nth-child(5), table td:nth-child(5) { width: 12%; } /* Aumentado de 10% */
+        table th:nth-child(6), table td:nth-child(6) { width: 20%; }
 
         .actions {
             white-space: nowrap;
@@ -299,18 +313,16 @@ header {
 
         @media (max-width: 768px) {
             header {
-                grid-template-columns: 1fr; /* Em telas pequenas, uma única coluna */
-                justify-items: center; /* Centraliza os itens na coluna */
                 padding: 16px 20px;
-                gap: 15px; /* Ajuste o gap para mobile */
+                flex-wrap: wrap; /* Permite que o cabeçalho quebre em várias linhas */
+                justify-content: center; /* Centraliza os itens quando quebrarem */
+                gap: 10px; /* Espaçamento entre os itens quebrados */
             }
-            .header-left, .header-right, .header-center {
-                grid-column: 1; /* Todos ocupam a única coluna */
-                width: 100%; /* Ocupa toda a largura */
+            .header-left, .header-right, .logo {
+                width: 100%; /* Ocupa toda a largura quando quebrar */
                 justify-content: center; /* Centraliza o conteúdo dentro dos blocos */
-                text-align: center; /* Garante que o texto também se centralize */
+                margin-bottom: 5px; /* Espaçamento extra entre blocos */
             }
-        }
             .filter-container {
                 flex-direction: column;
                 align-items: stretch;
@@ -376,7 +388,7 @@ header {
 </header>
 
 <main>
-    <h2>Gestão de Usuários</h2>
+    <h2>Gestão de Ferramentas</h2>
 
     <div th:if="${error}" style="background-color: #f8d7da; color: #721c24; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
         <p th:text="${error}"></p>
@@ -387,40 +399,45 @@ header {
     </div>
 
     <div class="filter-container">
-        <label for="userSearch">Filtrar por Nome ou Email:</label>
-        <input type="text" id="userSearch" placeholder="Digite para buscar..." onkeyup="filterUsers()">
+        <label for="toolSearch">Filtrar por Nome ou Descrição:</label>
+        <input type="text" id="toolSearch" placeholder="Digite para buscar..." onkeyup="filterTools()">
+
+        <label for="ownerSearch">Filtrar por Proprietário:</label>
+        <input type="text" id="ownerSearch" placeholder="Digite o nome do proprietário..." onkeyup="filterTools()">
     </div>
 
     <div class="table-responsive">
-        <table id="userTable">
+        <table id="toolTable">
             <thead>
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
-                <th>E-mail</th>
-                <th>Telefone</th>
-                <th>Cargo</th>
+                <th>Descrição</th>
+                <th>Proprietário</th>
+                <th>Disponível</th>
                 <th>Ações</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(users)}" class="no-initial-users">
-                <td colspan="6" class="no-results">Nenhum usuário cadastrado.</td>
+            <tr th:if="${#lists.isEmpty(tools)}" class="no-initial-tools">
+                <td colspan="6" class="no-results">Nenhuma ferramenta cadastrada.</td>
             </tr>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.phone ?: 'N/A'}"></td>
-                <td th:text="${user.role.name}"></td>
-                <td class="actions">
-                    <a th:href="@{'/admin/users/edit/' + ${user.id}}" class="edit-btn">Editar</a>
-                    <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="delete-btn"
-                       onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
+            <tr th:each="tool : ${tools}">
+                <td th:text="${tool.id}"></td>
+                <td th:text="${tool.name}"></td>
+                <td th:text="${tool.description}"></td>
+                <td th:text="${tool.owner.name}"></td>
+                <td>
+                    <span th:if="${tool.available}">Sim</span>
+                    <span th:unless="${tool.available}">Não</span>
                 </td>
+                <td class="actions">
+                    <a th:href="@{'/admin/tools/edit/' + ${tool.id}}" class="edit-btn">Editar</a>
+                    <a th:href="@{'/admin/tools/delete/' + ${tool.id}}" class="delete-btn"
+                       onclick="return confirm('Tem certeza que deseja excluir a ferramenta?')">Excluir</a>                </td>
             </tr>
             <tr id="noFilterResultsRow" class="no-results" style="display: none;">
-                <td colspan="6">Nenhum usuário encontrado com este filtro.</td>
+                <td colspan="6">Nenhuma ferramenta encontrada com este filtro.</td>
             </tr>
             </tbody>
         </table>
@@ -428,7 +445,7 @@ header {
 </main>
 
 <script>
-    // User dropdown logic
+    // Lógica do dropdown de usuário (copiada do users.html)
     const userIcon = document.getElementById('userIcon');
     const userDropdown = document.getElementById('userDropdown');
     let hideTimeout;
@@ -441,7 +458,7 @@ header {
     function hideDropdownWithDelay() {
         hideTimeout = setTimeout(() => {
             userDropdown.classList.remove('show');
-        }, 300); // Shorter delay for hiding
+        }, 300);
     }
 
     userIcon.addEventListener('mouseenter', showDropdown);
@@ -449,79 +466,85 @@ header {
     userDropdown.addEventListener('mouseenter', showDropdown);
     userDropdown.addEventListener('mouseleave', hideDropdownWithDelay);
 
-    // Filter users logic
-    function filterUsers() {
-        const input = document.getElementById('userSearch');
-        const filter = input.value.toLowerCase();
-        const table = document.getElementById('userTable');
+    // Lógica de filtro de ferramentas (adaptada de filterUsers)
+function filterTools() {
+        const toolInput = document.getElementById('toolSearch');
+        const toolFilter = toolInput.value.toLowerCase();
+
+        const ownerInput = document.getElementById('ownerSearch'); // Novo input de proprietário
+        const ownerFilter = ownerInput.value.toLowerCase(); // Filtro de proprietário
+
+        const table = document.getElementById('toolTable');
         const tbody = table.querySelector('tbody');
         const rows = tbody.getElementsByTagName('tr');
-        let foundResults = 0; // Changed to count visible rows
+        let foundResults = 0;
 
-        // Get the dynamically created no results row for filtered results
         const noFilterResultsRow = document.getElementById('noFilterResultsRow');
-        const initialNoUsersRow = table.querySelector('.no-initial-users');
+        const initialNoToolsRow = table.querySelector('.no-initial-tools');
 
-        // Loop through all data rows
         for (let i = 0; i < rows.length; i++) {
-            // Skip the special message rows from being processed as user data
-            if (rows[i].classList.contains('no-initial-users') || rows[i].id === 'noFilterResultsRow') {
-                rows[i].style.display = 'none'; // Ensure these are hidden by default in the loop
-                continue; // Skip this row in the filtering logic
+            if (rows[i].classList.contains('no-initial-tools') || rows[i].id === 'noFilterResultsRow') {
+                rows[i].style.display = 'none';
+                continue;
             }
 
-            const nameTd = rows[i].getElementsByTagName('td')[1]; // Nome column
-            const emailTd = rows[i].getElementsByTagName('td')[2]; // E-mail column
+            const nameTd = rows[i].getElementsByTagName('td')[1]; // Nome
+            const descriptionTd = rows[i].getElementsByTagName('td')[2]; // Descrição
+            const ownerTd = rows[i].getElementsByTagName('td')[3]; // Proprietário (nova célula)
 
-            if (nameTd || emailTd) {
+            if (nameTd || descriptionTd || ownerTd) {
                 const nameText = nameTd ? nameTd.textContent || nameTd.innerText : '';
-                const emailText = emailTd ? emailTd.textContent || emailTd.innerText : '';
+                const descriptionText = descriptionTd ? descriptionTd.textContent || descriptionTd.innerText : '';
+                const ownerText = ownerTd ? ownerTd.textContent || ownerTd.innerText : ''; // Texto do proprietário
 
-                if (nameText.toLowerCase().includes(filter) || emailText.toLowerCase().includes(filter)) {
-                    rows[i].style.display = ''; // Show row
-                    foundResults++; // Increment counter for visible rows
+                const matchesTool = nameText.toLowerCase().includes(toolFilter) || descriptionText.toLowerCase().includes(toolFilter);
+                const matchesOwner = ownerText.toLowerCase().includes(ownerFilter);
+
+                // Mostra a linha se corresponder a AMBOS os filtros (se estiverem preenchidos)
+                if (matchesTool && matchesOwner) {
+                    rows[i].style.display = '';
+                    foundResults++;
                 } else {
-                    rows[i].style.display = 'none'; // Hide row
+                    rows[i].style.display = 'none';
                 }
             }
         }
 
-        // Handle the "no results" message for filtering
         if (foundResults === 0) {
-            noFilterResultsRow.style.display = ''; // Show "Nenhum usuário encontrado com este filtro."
+            noFilterResultsRow.style.display = '';
         } else {
-            noFilterResultsRow.style.display = 'none'; // Hide it if results are found
+            noFilterResultsRow.style.display = 'none';
         }
 
-        // Ensure the initial "Nenhum usuário cadastrado." message is hidden if filter is active
-        if (initialNoUsersRow && filter.length > 0) {
-            initialNoUsersRow.style.display = 'none';
-        } else if (initialNoUsersRow && filter.length === 0 && foundResults === 0) {
-             // If filter is empty and no users, show initial message
-            initialNoUsersRow.style.display = '';
+        // Ajuste a lógica de exibição da mensagem "Nenhuma ferramenta cadastrada."
+        // para considerar os filtros
+        if (initialNoToolsRow) {
+            if (toolFilter.length > 0 || ownerFilter.length > 0) { // Se algum filtro estiver ativo
+                initialNoToolsRow.style.display = 'none';
+            } else if (foundResults === 0) { // Se nenhum filtro e não houver ferramentas
+                initialNoToolsRow.style.display = '';
+            } else { // Se não houver filtro e houver ferramentas
+                initialNoToolsRow.style.display = 'none';
+            }
         }
     }
 
-    // Ensure the initial "Nenhum usuário cadastrado." message and filter message are handled correctly on load
     document.addEventListener('DOMContentLoaded', () => {
-        const table = document.getElementById('userTable');
-        const initialNoUsersRow = table.querySelector('.no-initial-users');
+        const table = document.getElementById('toolTable');
+        const initialNoToolsRow = table.querySelector('.no-initial-tools');
         const noFilterResultsRow = document.getElementById('noFilterResultsRow');
-        const actualUserRows = table.querySelectorAll('tbody tr:not(.no-initial-users):not(#noFilterResultsRow)');
+        const actualToolRows = table.querySelectorAll('tbody tr:not(.no-initial-tools):not(#noFilterResultsRow)');
 
-        // If there are actual user rows, hide the initial "no users" message
-        if (actualUserRows.length > 0) {
-            if (initialNoUsersRow) {
-                initialNoUsersRow.style.display = 'none';
+        if (actualToolRows.length > 0) {
+            if (initialNoToolsRow) {
+                initialNoToolsRow.style.display = 'none';
             }
-            // Ensure the filter results message is hidden on initial load if there are users
             if (noFilterResultsRow) {
                 noFilterResultsRow.style.display = 'none';
             }
         } else {
-            // If no actual user rows, ensure the initial message is shown and filter message is hidden
-            if (initialNoUsersRow) {
-                initialNoUsersRow.style.display = '';
+            if (initialNoToolsRow) {
+                initialNoToolsRow.style.display = '';
             }
             if (noFilterResultsRow) {
                 noFilterResultsRow.style.display = 'none';

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Editar Ferramenta (Admin) - ShareTools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Copie e cole todo o CSS do seu edit-tool.html aqui, ou linke para um arquivo CSS se preferir. */
+        :root {
+            --roxo: #4B1F81;
+            --roxo-escuro: #36175E;
+            --amarelo: #F1C40F;
+            --amarelo-hover: #F39C12;
+            --cinza-claro: #f4f6f8;
+            --texto: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--texto);
+            margin-top: 80px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--roxo);
+            color: #ECF0F1;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.8);
+            z-index: 1000;
+        }
+
+        .nav-links a {
+            margin-right: 20px;
+            color: #ECF0F1;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--amarelo);
+        }
+
+        .user-icon {
+            position: relative;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .user-icon span {
+            font-size: 16px;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            color: var(--texto);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            text-align: left;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .user-icon:hover .user-dropdown,
+        .user-dropdown:hover {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        main {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            color: var(--roxo);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--roxo-escuro);
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--roxo);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--amarelo);
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+        .loaned-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+
+        button {
+            background-color: var(--roxo);
+            color: #ECF0F1;
+            padding: 12px 20px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--amarelo);
+            color: var(--roxo);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--roxo);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: var(--amarelo-hover);
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .alert-success {
+            background-color:#DFF0D8;
+            color:#3C763D;
+        }
+        .alert-error {
+            background-color:#F2DEDE;
+            color:#A94442;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-links">
+        <a href="/admin/users">Gestão de Usuários</a>
+        <a href="/admin/tools">Gestão de Ferramentas</a>
+    </div>
+
+    <div class="user-icon">
+        <span th:text="'👤 ' + ${#strings.arraySplit(userLogado.name, ' ')[0]}">👤 Usuário</span>
+        <div class="user-dropdown">
+            <a href="/users/logout">Sair</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h1>Editar Ferramenta (Admin)</h1>
+
+    <div th:if="${success}" class="alert alert-success">
+        <p th:text="${success}"></p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{/admin/tools/update}" th:object="${tool}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="name">Nome da Ferramenta:</label>
+        <input type="text" id="name" th:field="*{name}" required />
+
+        <label for="description">Descrição:</label>
+        <textarea id="description" th:field="*{description}" rows="6" required></textarea>
+
+        <label for="owner">Proprietário (ID):</label>
+        <input type="text" id="owner" th:value="${tool.owner.id}" name="ownerId" required />
+
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="available" th:field="*{available}"
+                   th:disabled="${tool.currentLoan != null}" />
+            <label for="available">Disponível para Empréstimo</label>
+
+            <span th:if="${tool.currentLoan != null}" class="loaned-message">
+                Essa ferramenta está emprestada no momento.
+            </span>
+        </div>
+
+        <button type="submit" th:disabled="${tool.currentLoan != null and tool.available}">Atualizar Ferramenta</button>
+    </form>
+
+    <a href="/admin/tools" class="back-button">Voltar para Gestão de Ferramentas</a>
+</main>
+
+<script>
+    // Lógica do dropdown de usuário (reutilizada)
+    const userIcon = document.querySelector('.user-icon');
+    const dropdown = document.querySelector('.user-dropdown');
+    let hideTimeout;
+
+    function showDropdown() {
+        clearTimeout(hideTimeout);
+        dropdown.style.display = 'block';
+        dropdown.style.opacity = '1';
+        dropdown.style.pointerEvents = 'auto';
+        dropdown.style.transform = 'translateY(0)';
+    }
+
+    function hideDropdownWithDelay() {
+        hideTimeout = setTimeout(() => {
+            dropdown.style.opacity = '0';
+            dropdown.style.pointer-events = 'none';
+            dropdown.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                if (dropdown.style.opacity === '0') {
+                    dropdown.style.display = 'none';
+                }
+            }, 300);
+        }, 300);
+    }
+
+    userIcon.addEventListener('mouseenter', showDropdown);
+    userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
+    dropdown.addEventListener('mouseenter', showDropdown);
+    dropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+</script>
+
+</body>
+</html>
