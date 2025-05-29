@@ -6,7 +6,6 @@
     <title>Gestão de Ferramentas - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* ... (Seu CSS existente, com as mesmas adições/modificações do users.html) ... */
         :root {
             --roxo: #4B1F81;
             --roxo-escuro: #36175E;
@@ -34,56 +33,40 @@
             background-color: var(--roxo-escuro);
             color: white;
             padding: 16px 40px;
-            display: grid; /* Altera para Grid */
-            grid-template-columns: 1fr auto 1fr; /* Três colunas: esquerda, centro (tamanho automático), direita */
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            position: relative; /* Mantém relative para o dropdown */
+            position: relative;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            gap: 20px; /* Espaçamento entre as colunas */
+            gap: 20px;
         }
 
-        /* Ajusta o posicionamento dos grupos de elementos */
         .header-left {
-            grid-column: 1; /* Coloca no início da primeira coluna */
-            display: flex; /* Mantém flex para organizar os itens internos */
+            grid-column: 1;
+            display: flex;
             align-items: center;
             gap: 20px;
         }
 
         .header-center {
-            grid-column: 2; /* Coloca no meio da segunda coluna */
-            /* Remove position: absolute e transform */
-            display: flex; /* Mantém flex para o ícone e texto do logo */
+            grid-column: 2;
+            display: flex;
             align-items: center;
             font-size: 24px;
             font-weight: 600;
             white-space: nowrap;
-            justify-content: center; /* Centraliza o conteúdo dentro da célula grid */
+            justify-content: center;
         }
 
         .header-right {
-            grid-column: 3; /* Coloca no final da terceira coluna */
-            display: flex; /* Mantém flex para organizar os itens internos */
+            grid-column: 3;
+            display: flex;
             align-items: center;
             gap: 20px;
-            justify-content: flex-end; /* Alinha os itens à direita */
+            justify-content: flex-end;
         }
 
-        @media (max-width: 768px) {
-            header {
-                grid-template-columns: 1fr; /* Em telas pequenas, uma única coluna */
-                justify-items: center; /* Centraliza os itens na coluna */
-                padding: 16px 20px;
-                gap: 15px; /* Ajuste o gap para mobile */
-            }
-            .header-left, .header-right, .header-center {
-                grid-column: 1; /* Todos ocupam a única coluna */
-                width: 100%; /* Ocupa toda a largura */
-                justify-content: center; /* Centraliza o conteúdo dentro dos blocos */
-                text-align: center; /* Garante que o texto também se centralize */
-            }
-        }
-
+        /* .logo é usado dentro de .header-center */
         .logo {
             display: flex;
             align-items: center;
@@ -102,7 +85,7 @@
             align-items: center;
             gap: 8px;
             font-weight: 600;
-            white-space: nowrap; /* Evita quebra de linha no nome */
+            white-space: nowrap;
         }
 
         .user-icon span {
@@ -150,6 +133,79 @@
         .user-dropdown a:hover {
             background-color: #f0f0f0;
         }
+
+        /* Estilos para o novo Admin Menu Dropdown */
+        .admin-menu-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-menu-button {
+            background-color: var(--amarelo);
+            color: var(--roxo-escuro);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Espaço entre o texto e a seta */
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .admin-menu-button:hover {
+            background-color: var(--amarelo-hover);
+        }
+
+        .admin-menu-button .arrow { /* Estilo para a seta */
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .admin-menu-dropdown.open .admin-menu-button .arrow {
+            transform: rotate(180deg); /* Gira a seta quando o menu está aberto */
+        }
+
+        .admin-menu-content {
+            display: none; /* Escondido por padrão */
+            position: absolute;
+            background-color: white;
+            color: var(--texto);
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            z-index: 1000;
+            margin-top: 8px;
+            padding: 8px 0;
+            border: 1px solid #e0e0e0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .admin-menu-content.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .admin-menu-content a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--texto);
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .admin-menu-content a:hover {
+            background-color: var(--cinza-claro);
+            color: var(--roxo);
+        }
+        /* Fim dos estilos do Admin Menu Dropdown */
 
         main {
             max-width: 1200px;
@@ -240,9 +296,9 @@
 
         table th:nth-child(1), table td:nth-child(1) { width: 8%; }
         table th:nth-child(2), table td:nth-child(2) { width: 20%; }
-        table th:nth-child(3), table td:nth-child(3) { width: 28%; } /* Reduzido de 30% */
+        table th:nth-child(3), table td:nth-child(3) { width: 28%; }
         table th:nth-child(4), table td:nth-child(4) { width: 12%; }
-        table th:nth-child(5), table td:nth-child(5) { width: 12%; } /* Aumentado de 10% */
+        table th:nth-child(5), table td:nth-child(5) { width: 12%; }
         table th:nth-child(6), table td:nth-child(6) { width: 20%; }
 
         .actions {
@@ -283,6 +339,8 @@
             transform: translateY(-2px);
         }
 
+        /* Removido .h2-btn e .admin-nav-links pois foram substituídos pelo dropdown */
+        /*
         .h2-btn {
             background-color: var(--amarelo);
             color: var(--roxo-escuro);
@@ -292,51 +350,10 @@
             font-weight: 600;
             text-decoration: none;
             transition: background-color 0.3s;
-            /* Removido margin-left para usar o gap do header-left */
         }
 
         .h2-btn:hover {
             background-color: var(--amarelo-hover);
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 30px;
-            font-size: 1.2rem;
-            color: #777;
-            background-color: #fdfdfd;
-            border-radius: 8px;
-            margin-top: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            border: 1px solid #eee;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 16px 20px;
-                flex-wrap: wrap; /* Permite que o cabeçalho quebre em várias linhas */
-                justify-content: center; /* Centraliza os itens quando quebrarem */
-                gap: 10px; /* Espaçamento entre os itens quebrados */
-            }
-            .header-left, .header-right, .logo {
-                width: 100%; /* Ocupa toda a largura quando quebrar */
-                justify-content: center; /* Centraliza o conteúdo dentro dos blocos */
-                margin-bottom: 5px; /* Espaçamento extra entre blocos */
-            }
-            .filter-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .filter-container input[type="text"] {
-                max-width: 100%;
-            }
-            table th, table td {
-                padding: 10px;
-            }
-            .actions a {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-            }
         }
 
         .admin-nav-links {
@@ -358,17 +375,69 @@
         .admin-nav-links a:hover {
             background-color: var(--amarelo-hover);
         }
+        */
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2rem;
+            color: #777;
+            background-color: #fdfdfd;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                /* Mantido grid, mas ajustado para mobile */
+                grid-template-columns: 1fr;
+                justify-items: center;
+                padding: 16px 20px;
+                gap: 15px;
+                /* Removido flex-wrap e justify-content que eram para flex */
+            }
+            .header-left, .header-right, .header-center { /* Aplicado .header-center também */
+                grid-column: 1;
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+                /* Removido margin-bottom, o gap do grid deve cuidar disso */
+            }
+             .admin-menu-content {
+                min-width: 180px;
+            }
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-container input[type="text"] {
+                max-width: 100%;
+            }
+            table th, table td {
+                padding: 10px;
+            }
+            .actions a {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="header-left">
-        <a href="/h2-console" target="_blank" class="h2-btn">H2</a>
-
-        <div class="admin-nav-links">
-            <a href="/admin/users">Gestão de Usuários</a>
-            <a href="/admin/tools">Gestão de Ferramentas</a>
+        <div class="admin-menu-dropdown" id="adminMenuDropdownContainer">
+            <button class="admin-menu-button" id="adminMenuButton">
+                Menu Admin <span class="arrow">▼</span>
+            </button>
+            <div class="admin-menu-content" id="adminMenuContent">
+                <a href="/admin/users">Gestão de Usuários</a>
+                <a href="/admin/tools">Gestão de Ferramentas</a>
+                <a href="/h2-console" target="_blank">H2 Console</a>
+            </div>
         </div>
     </div>
 
@@ -434,7 +503,8 @@
                 <td class="actions">
                     <a th:href="@{'/admin/tools/edit/' + ${tool.id}}" class="edit-btn">Editar</a>
                     <a th:href="@{'/admin/tools/delete/' + ${tool.id}}" class="delete-btn"
-                       onclick="return confirm('Tem certeza que deseja excluir a ferramenta?')">Excluir</a>                </td>
+                       onclick="return confirm('Tem certeza que deseja excluir a ferramenta?')">Excluir</a>
+                </td>
             </tr>
             <tr id="noFilterResultsRow" class="no-results" style="display: none;">
                 <td colspan="6">Nenhuma ferramenta encontrada com este filtro.</td>
@@ -445,37 +515,70 @@
 </main>
 
 <script>
-    // Lógica do dropdown de usuário (copiada do users.html)
+    // Lógica do dropdown de usuário
     const userIcon = document.getElementById('userIcon');
     const userDropdown = document.getElementById('userDropdown');
-    let hideTimeout;
+    let hideTimeout; // Variável para o timeout do dropdown de usuário
 
-    function showDropdown() {
+    function showDropdown() { // Função para mostrar o dropdown de usuário
         clearTimeout(hideTimeout);
-        userDropdown.classList.add('show');
+        if (userDropdown) {
+             userDropdown.classList.add('show');
+        }
     }
 
-    function hideDropdownWithDelay() {
+    function hideDropdownWithDelay() { // Função para esconder o dropdown de usuário com delay
         hideTimeout = setTimeout(() => {
-            userDropdown.classList.remove('show');
+            if (userDropdown) {
+                userDropdown.classList.remove('show');
+            }
         }, 300);
     }
 
-    userIcon.addEventListener('mouseenter', showDropdown);
-    userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
-    userDropdown.addEventListener('mouseenter', showDropdown);
-    userDropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+    if (userIcon && userDropdown) {
+        userIcon.addEventListener('mouseenter', showDropdown);
+        userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
+        userDropdown.addEventListener('mouseenter', showDropdown);
+        userDropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+    }
 
-    // Lógica de filtro de ferramentas (adaptada de filterUsers)
-function filterTools() {
+    // Admin Menu Dropdown Logic (Nova lógica adicionada)
+    const adminMenuDropdownContainer = document.getElementById('adminMenuDropdownContainer');
+    const adminMenuButton = document.getElementById('adminMenuButton');
+    const adminMenuContent = document.getElementById('adminMenuContent');
+
+    if (adminMenuButton && adminMenuContent && adminMenuDropdownContainer) {
+        adminMenuButton.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const isOpen = adminMenuContent.classList.contains('show');
+            adminMenuContent.classList.toggle('show');
+            adminMenuDropdownContainer.classList.toggle('open', !isOpen);
+        });
+
+        window.addEventListener('click', function(event) {
+            if (adminMenuButton && adminMenuContent && adminMenuDropdownContainer && // Checagens de existência
+                !adminMenuButton.contains(event.target) &&
+                !adminMenuContent.contains(event.target)) {
+                if (adminMenuContent.classList.contains('show')) {
+                    adminMenuContent.classList.remove('show');
+                    adminMenuDropdownContainer.classList.remove('open');
+                }
+            }
+        });
+    }
+
+    // Lógica de filtro de ferramentas
+    function filterTools() {
         const toolInput = document.getElementById('toolSearch');
-        const toolFilter = toolInput.value.toLowerCase();
+        const toolFilter = toolInput ? toolInput.value.toLowerCase() : "";
 
-        const ownerInput = document.getElementById('ownerSearch'); // Novo input de proprietário
-        const ownerFilter = ownerInput.value.toLowerCase(); // Filtro de proprietário
+        const ownerInput = document.getElementById('ownerSearch');
+        const ownerFilter = ownerInput ? ownerInput.value.toLowerCase() : "";
 
         const table = document.getElementById('toolTable');
+        if (!table) return;
         const tbody = table.querySelector('tbody');
+        if (!tbody) return;
         const rows = tbody.getElementsByTagName('tr');
         let foundResults = 0;
 
@@ -484,72 +587,69 @@ function filterTools() {
 
         for (let i = 0; i < rows.length; i++) {
             if (rows[i].classList.contains('no-initial-tools') || rows[i].id === 'noFilterResultsRow') {
-                rows[i].style.display = 'none';
+                if(rows[i].id === 'noFilterResultsRow') rows[i].style.display = 'none'; // Garante que a msg de filtro é resetada
                 continue;
             }
 
-            const nameTd = rows[i].getElementsByTagName('td')[1]; // Nome
-            const descriptionTd = rows[i].getElementsByTagName('td')[2]; // Descrição
-            const ownerTd = rows[i].getElementsByTagName('td')[3]; // Proprietário (nova célula)
+            const nameTd = rows[i].getElementsByTagName('td')[1];
+            const descriptionTd = rows[i].getElementsByTagName('td')[2];
+            const ownerTd = rows[i].getElementsByTagName('td')[3];
 
-            if (nameTd || descriptionTd || ownerTd) {
-                const nameText = nameTd ? nameTd.textContent || nameTd.innerText : '';
-                const descriptionText = descriptionTd ? descriptionTd.textContent || descriptionTd.innerText : '';
-                const ownerText = ownerTd ? ownerTd.textContent || ownerTd.innerText : ''; // Texto do proprietário
+            const nameText = nameTd ? nameTd.textContent || nameTd.innerText : '';
+            const descriptionText = descriptionTd ? descriptionTd.textContent || descriptionTd.innerText : '';
+            const ownerText = ownerTd ? ownerTd.textContent || ownerTd.innerText : '';
 
-                const matchesTool = nameText.toLowerCase().includes(toolFilter) || descriptionText.toLowerCase().includes(toolFilter);
-                const matchesOwner = ownerText.toLowerCase().includes(ownerFilter);
+            const matchesTool = (toolFilter === "") || nameText.toLowerCase().includes(toolFilter) || descriptionText.toLowerCase().includes(toolFilter);
+            const matchesOwner = (ownerFilter === "") || ownerText.toLowerCase().includes(ownerFilter);
 
-                // Mostra a linha se corresponder a AMBOS os filtros (se estiverem preenchidos)
-                if (matchesTool && matchesOwner) {
-                    rows[i].style.display = '';
-                    foundResults++;
-                } else {
-                    rows[i].style.display = 'none';
-                }
+            if (matchesTool && matchesOwner) {
+                rows[i].style.display = '';
+                foundResults++;
+            } else {
+                rows[i].style.display = 'none';
             }
         }
 
-        if (foundResults === 0) {
-            noFilterResultsRow.style.display = '';
-        } else {
-            noFilterResultsRow.style.display = 'none';
+        const anyFilterActive = toolFilter.length > 0 || ownerFilter.length > 0;
+
+        if (noFilterResultsRow) {
+            noFilterResultsRow.style.display = (foundResults === 0 && anyFilterActive) ? '' : 'none';
         }
 
-        // Ajuste a lógica de exibição da mensagem "Nenhuma ferramenta cadastrada."
-        // para considerar os filtros
         if (initialNoToolsRow) {
-            if (toolFilter.length > 0 || ownerFilter.length > 0) { // Se algum filtro estiver ativo
-                initialNoToolsRow.style.display = 'none';
-            } else if (foundResults === 0) { // Se nenhum filtro e não houver ferramentas
-                initialNoToolsRow.style.display = '';
-            } else { // Se não houver filtro e houver ferramentas
-                initialNoToolsRow.style.display = 'none';
+            if (anyFilterActive) {
+                 initialNoToolsRow.style.display = 'none';
+            } else {
+                 initialNoToolsRow.style.display = (foundResults === 0 && actualToolRowsCount() === 0) ? '' : 'none';
             }
         }
     }
 
+    function actualToolRowsCount() {
+        const table = document.getElementById('toolTable');
+        if (!table) return 0;
+        const tbody = table.querySelector('tbody');
+        if (!tbody) return 0;
+        return tbody.querySelectorAll('tr:not(.no-initial-tools):not(#noFilterResultsRow)').length;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const table = document.getElementById('toolTable');
+        if (!table) return;
+
         const initialNoToolsRow = table.querySelector('.no-initial-tools');
         const noFilterResultsRow = document.getElementById('noFilterResultsRow');
-        const actualToolRows = table.querySelectorAll('tbody tr:not(.no-initial-tools):not(#noFilterResultsRow)');
 
-        if (actualToolRows.length > 0) {
-            if (initialNoToolsRow) {
-                initialNoToolsRow.style.display = 'none';
-            }
-            if (noFilterResultsRow) {
-                noFilterResultsRow.style.display = 'none';
-            }
-        } else {
-            if (initialNoToolsRow) {
-                initialNoToolsRow.style.display = '';
-            }
-            if (noFilterResultsRow) {
-                noFilterResultsRow.style.display = 'none';
-            }
+        const count = actualToolRowsCount();
+
+        if (initialNoToolsRow) {
+            initialNoToolsRow.style.display = (count === 0) ? '' : 'none';
         }
+        if (noFilterResultsRow) {
+            noFilterResultsRow.style.display = 'none';
+        }
+        // Chamada inicial para garantir que a mensagem correta seja exibida se a tabela estiver vazia ou não no carregamento.
+        filterTools();
     });
 
 </script>

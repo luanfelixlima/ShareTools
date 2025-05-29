@@ -215,19 +215,7 @@
 </head>
 <body>
 
-<header>
-    <div class="nav-links">
-        <a href="/admin/users">Gestão de Usuários</a>
-        <a href="/admin/tools">Gestão de Ferramentas</a>
-    </div>
 
-    <div class="user-icon">
-        <span th:text="'👤 ' + ${#strings.arraySplit(userLogado.name, ' ')[0]}">👤 Usuário</span>
-        <div class="user-dropdown">
-            <a href="/users/logout">Sair</a>
-        </div>
-    </div>
-</header>
 
 <main>
     <h1>Editar Ferramenta (Admin)</h1>
@@ -248,9 +236,6 @@
 
         <label for="description">Descrição:</label>
         <textarea id="description" th:field="*{description}" rows="6" required></textarea>
-
-        <label for="owner">Proprietário (ID):</label>
-        <input type="text" id="owner" th:value="${tool.owner.id}" name="ownerId" required />
 
 
         <div class="checkbox-group">

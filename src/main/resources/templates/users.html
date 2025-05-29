@@ -6,7 +6,6 @@
     <title>Gestão de Usuários - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* ... (Seu CSS existente, com as seguintes adições/modificações no final) ... */
         :root {
             --roxo: #4B1F81;
             --roxo-escuro: #36175E;
@@ -30,7 +29,7 @@
             color: var(--texto);
         }
 
-header {
+        header {
             background-color: var(--roxo-escuro);
             color: white;
             padding: 16px 40px;
@@ -42,35 +41,32 @@ header {
             gap: 20px; /* Espaçamento entre as colunas */
         }
 
-        /* Ajusta o posicionamento dos grupos de elementos */
         .header-left {
-            grid-column: 1; /* Coloca no início da primeira coluna */
-            display: flex; /* Mantém flex para organizar os itens internos */
+            grid-column: 1;
+            display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        /* Adicione esta nova regra para centralizar o logo no layout Grid */
         .header-center {
-            grid-column: 2; /* Coloca no meio da segunda coluna */
-            display: flex; /* Mantém flex para o ícone e texto do logo */
+            grid-column: 2;
+            display: flex;
             align-items: center;
             font-size: 24px;
             font-weight: 600;
             white-space: nowrap;
-            justify-content: center; /* Centraliza o conteúdo dentro da célula grid */
+            justify-content: center;
         }
 
         .header-right {
-            grid-column: 3; /* Coloca no final da terceira coluna */
-            display: flex; /* Mantém flex para organizar os itens internos */
+            grid-column: 3;
+            display: flex;
             align-items: center;
             gap: 20px;
-            justify-content: flex-end; /* Alinha os itens à direita */
+            justify-content: flex-end;
         }
 
-
-        .logo {
+        .logo { /* Esta classe já existia e é usada em header-center */
             display: flex;
             align-items: center;
             font-size: 24px;
@@ -88,7 +84,7 @@ header {
             align-items: center;
             gap: 8px;
             font-weight: 600;
-            white-space: nowrap; /* Evita quebra de linha no nome */
+            white-space: nowrap;
         }
 
         .user-icon span {
@@ -136,6 +132,79 @@ header {
         .user-dropdown a:hover {
             background-color: #f0f0f0;
         }
+
+        /* Estilos para o novo Admin Menu Dropdown */
+        .admin-menu-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-menu-button {
+            background-color: var(--amarelo);
+            color: var(--roxo-escuro);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Espaço entre o texto e a seta */
+            transition: background-color 0.3s;
+            font-size: 0.9rem; /* Ajuste o tamanho da fonte se necessário */
+        }
+
+        .admin-menu-button:hover {
+            background-color: var(--amarelo-hover);
+        }
+
+        .admin-menu-button .arrow { /* Estilo para a seta */
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .admin-menu-dropdown.open .admin-menu-button .arrow {
+            transform: rotate(180deg); /* Gira a seta quando o menu está aberto */
+        }
+
+        .admin-menu-content {
+            display: none; /* Escondido por padrão */
+            position: absolute;
+            background-color: white;
+            color: var(--texto);
+            min-width: 220px; /* Ajuste conforme necessário */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            z-index: 1000; /* Acima de outros conteúdos */
+            margin-top: 8px; /* Espaço entre o botão e o dropdown */
+            padding: 8px 0;
+            border: 1px solid #e0e0e0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .admin-menu-content.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .admin-menu-content a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--texto);
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .admin-menu-content a:hover {
+            background-color: var(--cinza-claro);
+            color: var(--roxo);
+        }
+        /* Fim dos estilos do Admin Menu Dropdown */
 
         main {
             max-width: 1200px;
@@ -269,21 +338,8 @@ header {
             transform: translateY(-2px);
         }
 
-        .h2-btn {
-            background-color: var(--amarelo);
-            color: var(--roxo-escuro);
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            /* Removido margin-left para usar o gap do header-left */
-        }
-
-        .h2-btn:hover {
-            background-color: var(--amarelo-hover);
-        }
+        /* Removido .h2-btn pois o link H2 está agora no dropdown */
+        /* Removido .admin-nav-links e .admin-nav-links a pois foram substituídos pelo dropdown */
 
         .no-results {
             text-align: center;
@@ -299,18 +355,25 @@ header {
 
         @media (max-width: 768px) {
             header {
-                grid-template-columns: 1fr; /* Em telas pequenas, uma única coluna */
-                justify-items: center; /* Centraliza os itens na coluna */
+                grid-template-columns: 1fr;
+                justify-items: center;
                 padding: 16px 20px;
-                gap: 15px; /* Ajuste o gap para mobile */
+                gap: 15px;
             }
             .header-left, .header-right, .header-center {
-                grid-column: 1; /* Todos ocupam a única coluna */
-                width: 100%; /* Ocupa toda a largura */
-                justify-content: center; /* Centraliza o conteúdo dentro dos blocos */
-                text-align: center; /* Garante que o texto também se centralize */
+                grid-column: 1;
+                width: 100%;
+                justify-content: center;
+                text-align: center;
             }
-        }
+            /* Ajuste para o dropdown em mobile se necessário */
+            .admin-menu-content {
+                /* Se o dropdown estiver muito à esquerda/direita em mobile,
+                   pode ser necessário ajustar 'left' ou 'right' aqui,
+                   ou torná-lo de largura total. Ex: left: 50%; transform: translateX(-50%); */
+                min-width: 180px; /* Pode reduzir um pouco para mobile */
+            }
+
             .filter-container {
                 flex-direction: column;
                 align-items: stretch;
@@ -326,37 +389,21 @@ header {
                 font-size: 0.8rem;
             }
         }
-
-        .admin-nav-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        .admin-nav-links a {
-            background-color: var(--amarelo);
-            color: var(--roxo-escuro);
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .admin-nav-links a:hover {
-            background-color: var(--amarelo-hover);
-        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="header-left">
-        <a href="/h2-console" target="_blank" class="h2-btn">H2</a>
-
-        <div class="admin-nav-links">
-            <a href="/admin/users">Gestão de Usuários</a>
-            <a href="/admin/tools">Gestão de Ferramentas</a>
+        <div class="admin-menu-dropdown" id="adminMenuDropdownContainer">
+            <button class="admin-menu-button" id="adminMenuButton">
+                Menu Admin <span class="arrow">▼</span>
+            </button>
+            <div class="admin-menu-content" id="adminMenuContent">
+                <a href="/admin/users">Gestão de Usuários</a>
+                <a href="/admin/tools">Gestão de Ferramentas</a>
+                <a href="/h2-console" target="_blank">H2 Console</a>
+            </div>
         </div>
     </div>
 
@@ -431,23 +478,49 @@ header {
     // User dropdown logic
     const userIcon = document.getElementById('userIcon');
     const userDropdown = document.getElementById('userDropdown');
-    let hideTimeout;
+    let hideUserDropdownTimeout;
 
-    function showDropdown() {
-        clearTimeout(hideTimeout);
+    function showUserDropdown() {
+        clearTimeout(hideUserDropdownTimeout);
         userDropdown.classList.add('show');
     }
 
-    function hideDropdownWithDelay() {
-        hideTimeout = setTimeout(() => {
+    function hideUserDropdownWithDelay() {
+        hideUserDropdownTimeout = setTimeout(() => {
             userDropdown.classList.remove('show');
-        }, 300); // Shorter delay for hiding
+        }, 200); // Reduzido um pouco o delay para melhor responsividade
     }
 
-    userIcon.addEventListener('mouseenter', showDropdown);
-    userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
-    userDropdown.addEventListener('mouseenter', showDropdown);
-    userDropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+    if (userIcon && userDropdown) {
+        userIcon.addEventListener('mouseenter', showUserDropdown);
+        userIcon.addEventListener('mouseleave', hideUserDropdownWithDelay);
+        userDropdown.addEventListener('mouseenter', showUserDropdown);
+        userDropdown.addEventListener('mouseleave', hideUserDropdownWithDelay);
+    }
+
+    // Admin Menu Dropdown Logic
+    const adminMenuDropdownContainer = document.getElementById('adminMenuDropdownContainer');
+    const adminMenuButton = document.getElementById('adminMenuButton');
+    const adminMenuContent = document.getElementById('adminMenuContent');
+
+    if (adminMenuButton && adminMenuContent && adminMenuDropdownContainer) {
+        adminMenuButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Impede que o clique no botão feche o menu imediatamente
+            const isOpen = adminMenuContent.classList.contains('show');
+            adminMenuContent.classList.toggle('show');
+            adminMenuDropdownContainer.classList.toggle('open', !isOpen); // Adiciona/remove classe 'open' no container
+        });
+
+        // Opcional: Fechar o dropdown se clicar fora dele
+        window.addEventListener('click', function(event) {
+            if (!adminMenuButton.contains(event.target) && !adminMenuContent.contains(event.target)) {
+                if (adminMenuContent.classList.contains('show')) {
+                    adminMenuContent.classList.remove('show');
+                    adminMenuDropdownContainer.classList.remove('open');
+                }
+            }
+        });
+    }
 
     // Filter users logic
     function filterUsers() {
@@ -456,77 +529,72 @@ header {
         const table = document.getElementById('userTable');
         const tbody = table.querySelector('tbody');
         const rows = tbody.getElementsByTagName('tr');
-        let foundResults = 0; // Changed to count visible rows
+        let foundResults = 0;
 
-        // Get the dynamically created no results row for filtered results
         const noFilterResultsRow = document.getElementById('noFilterResultsRow');
         const initialNoUsersRow = table.querySelector('.no-initial-users');
 
-        // Loop through all data rows
         for (let i = 0; i < rows.length; i++) {
-            // Skip the special message rows from being processed as user data
             if (rows[i].classList.contains('no-initial-users') || rows[i].id === 'noFilterResultsRow') {
-                rows[i].style.display = 'none'; // Ensure these are hidden by default in the loop
-                continue; // Skip this row in the filtering logic
+                rows[i].style.display = 'none';
+                continue;
             }
 
-            const nameTd = rows[i].getElementsByTagName('td')[1]; // Nome column
-            const emailTd = rows[i].getElementsByTagName('td')[2]; // E-mail column
+            const nameTd = rows[i].getElementsByTagName('td')[1];
+            const emailTd = rows[i].getElementsByTagName('td')[2];
 
             if (nameTd || emailTd) {
                 const nameText = nameTd ? nameTd.textContent || nameTd.innerText : '';
                 const emailText = emailTd ? emailTd.textContent || emailTd.innerText : '';
 
                 if (nameText.toLowerCase().includes(filter) || emailText.toLowerCase().includes(filter)) {
-                    rows[i].style.display = ''; // Show row
-                    foundResults++; // Increment counter for visible rows
+                    rows[i].style.display = '';
+                    foundResults++;
                 } else {
-                    rows[i].style.display = 'none'; // Hide row
+                    rows[i].style.display = 'none';
                 }
             }
         }
 
-        // Handle the "no results" message for filtering
-        if (foundResults === 0) {
-            noFilterResultsRow.style.display = ''; // Show "Nenhum usuário encontrado com este filtro."
+        if (foundResults === 0 && filter.length > 0) { // Só mostra msg de filtro se houver filtro e nada encontrado
+            noFilterResultsRow.style.display = '';
         } else {
-            noFilterResultsRow.style.display = 'none'; // Hide it if results are found
+            noFilterResultsRow.style.display = 'none';
         }
 
-        // Ensure the initial "Nenhum usuário cadastrado." message is hidden if filter is active
-        if (initialNoUsersRow && filter.length > 0) {
-            initialNoUsersRow.style.display = 'none';
-        } else if (initialNoUsersRow && filter.length === 0 && foundResults === 0) {
-             // If filter is empty and no users, show initial message
-            initialNoUsersRow.style.display = '';
+        if (initialNoUsersRow) {
+            if (filter.length === 0 && actualUserRowsCount() === 0) { // Se filtro limpo e sem usuários iniciais
+                initialNoUsersRow.style.display = '';
+            } else {
+                initialNoUsersRow.style.display = 'none';
+            }
         }
     }
 
-    // Ensure the initial "Nenhum usuário cadastrado." message and filter message are handled correctly on load
+    function actualUserRowsCount() {
+        const table = document.getElementById('userTable');
+        if (!table) return 0;
+        const tbody = table.querySelector('tbody');
+        if (!tbody) return 0;
+        // Conta trs que não são as linhas de mensagem especial
+        return tbody.querySelectorAll('tr:not(.no-initial-users):not(#noFilterResultsRow)').length;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const table = document.getElementById('userTable');
         const initialNoUsersRow = table.querySelector('.no-initial-users');
         const noFilterResultsRow = document.getElementById('noFilterResultsRow');
-        const actualUserRows = table.querySelectorAll('tbody tr:not(.no-initial-users):not(#noFilterResultsRow)');
 
-        // If there are actual user rows, hide the initial "no users" message
-        if (actualUserRows.length > 0) {
-            if (initialNoUsersRow) {
-                initialNoUsersRow.style.display = 'none';
-            }
-            // Ensure the filter results message is hidden on initial load if there are users
-            if (noFilterResultsRow) {
-                noFilterResultsRow.style.display = 'none';
-            }
-        } else {
-            // If no actual user rows, ensure the initial message is shown and filter message is hidden
-            if (initialNoUsersRow) {
-                initialNoUsersRow.style.display = '';
-            }
-            if (noFilterResultsRow) {
-                noFilterResultsRow.style.display = 'none';
-            }
+        const count = actualUserRowsCount();
+
+        if (initialNoUsersRow) {
+            initialNoUsersRow.style.display = (count === 0) ? '' : 'none';
         }
+        if (noFilterResultsRow) {
+            noFilterResultsRow.style.display = 'none'; // Sempre escondido no início
+        }
+         // Chamada inicial para garantir que a mensagem correta seja exibida se a tabela estiver vazia no carregamento
+        filterUsers();
     });
 
 </script>
