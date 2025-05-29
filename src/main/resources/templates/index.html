@@ -11,17 +11,50 @@
             crossorigin="anonymous"
     >
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
     <style>
+        :root {
+            --primary-color: #4B1F81; /* Deep Purple */
+            --secondary-color: #5E2B97; /* Medium Purple */
+            --accent-color: #F1C40F; /* Yellow */
+            --accent-hover-color: #F39C12; /* Darker Yellow/Orange */
+            --light-text-color: #ECF0F1; /* Light Grey/White */
+            --dark-text-color: #333333;
+            --muted-text-color: #555555;
+            --background-gradient-start: #e5dcf5;
+            --background-gradient-end: #f9f4ff;
+            --hero-gradient-start: #8E44AD;
+            --hero-gradient-end: #5E2B97;
+            --card-background: #ffffff;
+            --light-background: #f8f9fa; /* Bootstrap-like light grey */
+
+            --default-border-radius: 8px;
+            --header-shadow: 0 4px 12px rgba(45, 20, 77, 0.3);
+            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            --button-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --button-hover-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            --feature-box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09); /* Nova sombra para features */
+            --feature-border: 1px solid #ddd; /* Nova borda para features */
+
+
+            --font-main: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e5dcf5, #f9f4ff);
-            color: #333;
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
+            color: var(--dark-text-color);
             opacity: 0;
-            animation: fadeIn 0.8s ease-out forwards;
+            animation: fadeIn 1s ease-out forwards;
+            line-height: 1.6;
         }
 
         @keyframes fadeIn {
@@ -31,18 +64,18 @@
         }
 
         header {
-            background-color: #4B1F81;
-            color: #ECF0F1;
-            padding: 16px 40px;
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 18px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            box-shadow: 0 4px 12px rgba(75, 31, 129, 0.8);
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            box-shadow: var(--header-shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-radius: 0 0 12px 12px;
+            /* border-radius: 0 0 12px 12px; /* Removido */
         }
 
         .logo {
@@ -50,228 +83,385 @@
             align-items: center;
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--light-text-color);
             transition: color 0.3s ease;
+            text-decoration: none;
         }
-
+        .logo .material-symbols-outlined {
+             font-size: 32px; /* Matched to text */
+             margin-right: 8px;
+        }
         .logo:hover {
-            color: #F1C40F;
+            color: var(--accent-color);
         }
 
-        .navbar-links {
+        .navbar-main-links { /* Renamed for clarity */
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+            gap: 25px; /* Increased gap */
+            align-items: center;
         }
 
-        .navbar-links a {
-            color: #ECF0F1;
+        .navbar-main-links a {
+            color: var(--light-text-color);
             text-decoration: none;
             font-size: 16px;
-            transition: color 0.3s;
+            font-weight: 600;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px 0;
         }
 
-        .navbar-links a:hover {
-            color: #F1C40F;
+        .navbar-main-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
         }
 
         .auth-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 10px;
+            gap: 15px;
+            align-items: center;
         }
 
-        .auth-buttons button {
+        .auth-buttons .btn-auth {
             background-color: transparent;
-            border: 1px solid #ECF0F1;
-            color: #ECF0F1;
-            padding: 8px 16px;
-            font-size: 14px;
-            border-radius: 6px;
+            border: 2px solid var(--light-text-color);
+            color: var(--light-text-color);
+            padding: 8px 18px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--default-border-radius);
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .auth-buttons button:hover {
-            background-color: #F1C40F;
-            border-color: #F1C40F;
-            color: #4B1F81;
-        }
-
-        .auth-buttons .register {
-            background-color: #8E44AD;
-            border-color: #8E44AD;
-        }
-
-        .auth-buttons .register:hover {
-            background-color: #4B1F81;
-            border-color: #4B1F81;
-            color: #ECF0F1;
-        }
-
-        nav a {
-            color: #ECF0F1;
-            margin-left: 20px;
+            transition: all 0.3s ease;
             text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: #F1C40F;
+        .auth-buttons .btn-auth:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateY(-2px) scale(1.05);
         }
 
+        .auth-buttons .btn-auth.register {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .auth-buttons .btn-auth.register:hover {
+            background-color: var(--accent-hover-color);
+            border-color: var(--accent-hover-color);
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
         .hero {
             text-align: center;
-            padding: 80px 20px 60px;
-            background: linear-gradient(to right, #8E44AD, #5E2B97);
-            color: #ECF0F1;
-            box-shadow: 0 6px 16px rgba(75, 31, 129, 0.2);
+            padding: 100px 20px 90px;
+            background: linear-gradient(135deg, var(--hero-gradient-start), var(--hero-gradient-end));
+            color: var(--light-text-color);
+            box-shadow: 0 6px 20px rgba(75, 31, 129, 0.25);
+            position: relative;
+            overflow: hidden;
         }
 
         .hero h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
+            font-size: 52px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.25);
+            letter-spacing: -1px;
         }
 
         .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
+            font-size: 22px;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.95;
+            font-weight: 400;
         }
 
-        .hero button {
-            background-color: #F39C12;
-            color: #5E2B97;
+        /* General Button Style */
+        .btn-cta {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
             border: none;
-            padding: 14px 28px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 18px;
+            font-weight: 700; /* Bolder for CTAs */
+            border-radius: var(--default-border-radius);
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--button-shadow);
+            letter-spacing: 0.5px;
         }
 
-        .hero button:hover {
-            background-color: #F1C40F;
+        .btn-cta:hover {
+            background-color: var(--accent-hover-color);
+            color: var(--primary-color);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: var(--button-hover-shadow);
         }
 
+        /* Sections Styling */
         .section {
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
-            background-color: #fff;
+        }
+        .section:nth-of-type(even) { /* Exclude hero, apply to actual content sections */
+             background-color: var(--light-background);
+        }
+        #beneficios { background-color: var(--card-background); }
+        #como-funciona { background-color: var(--light-background); }
+
+
+        .section-title { /* Common style for section titles */
+            font-size: 38px;
+            margin-bottom: 25px; /* Adjusted this from general .section-subtitle */
+            color: var(--secondary-color);
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .section-title::after { /* Decorative underline */
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
         }
 
-        .section h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #5E2B97;
+        .section-subtitle { /* For paragraphs directly under section titles */
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--muted-text-color);
+            max-width: 700px;
+            margin: 0 auto 50px auto; /* Default bottom margin for most subtitles */
         }
 
+        /* Features Section (#beneficios) */
         .features {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 40px; /* Space after section title/subtitle */
         }
 
         .feature {
-            max-width: 250px;
-        }
-
-        .material-symbols-outlined {
-            font-size: 48px;
-            color: #8E44AD;
-            margin-bottom: 10px;
-        }
-
-        .cta {
-            background-color: #5E2B97;
-            color: #ECF0F1;
-            padding: 60px 20px;
-        }
-
-        .cta button {
-            margin-top: 20px;
-            background-color: #F39C12;
-            color: #5E2B97;
-            padding: 14px 32px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-
-        .cta button:hover {
-            background-color: #F1C40F;
-        }
-
-        footer {
-            background-color: #5E2B97;
-            color: #ECF0F1;
+            background-color: var(--card-background);
+            padding: 30px 25px;
+            border-radius: var(--default-border-radius);
+            box-shadow: var(--feature-box-shadow); /* Usando a nova variável de sombra */
+            border: var(--feature-border); /* Adicionando a nova borda */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Adicionado border-color na transição */
+            max-width: 320px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            border-radius: 12px 12px 0 0;
         }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: var(--secondary-color); /* Borda fica mais escura no hover */
+        }
+
+        .feature .feature-icon { /* Wrapper for icon */
+            font-size: 48px;
+            color: var(--light-text-color); /* Icon color inside circle */
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--hero-gradient-start), var(--secondary-color));
+            border-radius: 50%;
+            width: 80px; /* Circle size */
+            height: 80px; /* Circle size */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+         .feature .feature-icon .material-symbols-outlined {
+            font-size: 40px; /* Icon size within circle */
+         }
+
+
+        .feature h3 {
+            font-size: 22px;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .feature p {
+            font-size: 16px;
+            line-height: 1.65;
+            color: var(--muted-text-color);
+        }
+
+        /* CTA Section */
+        .cta-section { /* Specific class for this section */
+            background-color: #4B1F81 //var(--secondary-color); /* ALTERADO: Cor de fundo para roxo primário */
+            color: var(--light-text-color);
+            padding: 70px 20px;
+        }
+
+        .cta-section .section-title { color: var(--light-text-color); }
+        .cta-section .section-title::after { background-color: var(--accent-color); }
+        .cta-section .section-subtitle {
+            color: var(--light-text-color); /* CORRIGIDO: Texto totalmente opaco */
+            opacity: 0.95; /* Leve opacidade para suavizar, mas ainda legível */
+            margin-bottom: 30px; /* AJUSTADO: Menor margem antes do botão */
+        }
+        .cta-section .btn-cta { margin-top: 20px; }
 
         #contato {
-            padding: 40px 20px;
-            background-color: #ECF0F1;
-            color: #5E2B97;
+            padding: 70px 20px;
+            background-color: var(--light-background);
+            text-align: center; /* ALTERADO: Alinha todo o conteúdo da seção ao centro */
+        }
+        #contato .section-title {
+            color: var(--secondary-color);
+            text-align: center; /* ALTERADO: Alinha o título ao centro */
+        }
+        #contato .section-title::after {
+            margin: 15px auto 0; /* ALTERADO: Centraliza o underline */
+        }
+        #contato .section-subtitle {
+            margin-bottom: 35px;
+            text-align: center; /* ALTERADO: Alinha o subtítulo ao centro */
+            margin-left: auto; /* Garante que o max-width funcione corretamente ao centro */
+            margin-right: auto; /* Garante que o max-width funcione corretamente ao centro */
         }
 
-        #contato h2 {
-            margin-bottom: 16px;
-            color: #5E2B97;
+        .contact-info {
+            text-align: center; /* Garante que as informações de contato fiquem ao centro */
         }
 
-        #contato p {
-            font-size: 16px;
-            color: #5E2B97;
+        .contact-info p {
+            font-size: 18px;
+            color: var(--dark-text-color);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* ALTERADO: Alinha os itens ao centro */
+            gap: 10px;
         }
-
-        #contato a {
-            color: #8E44AD;
+        .contact-info p .material-symbols-outlined {
+            font-size: 28px;
+            color: var(--accent-hover-color);
+        }
+        .contact-info a {
+            color: var(--secondary-color);
             text-decoration: none;
-            transition: color 0.3s;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
-
-        #contato a:hover {
-            color: #F39C12;
+        .contact-info a:hover {
+            color: var(--accent-hover-color);
             text-decoration: underline;
         }
 
-        #contato .material-symbols-outlined {
-            font-size: 20px;
-            color: #F39C12;
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 35px 20px;
+            font-size: 15px;
+        }
+        footer p {
+            margin: 0;
+            opacity: 0.9;
         }
 
-        /* Responsivo */
-        @media (max-width: 768px) {
+        /* Responsiveness */
+        @media (max-width: 992px) { /* Tablet and smaller */
+            header {
+                padding: 15px 20px;
+            }
+            .navbar-main-links {
+                gap: 15px; /* Reduce gap */
+            }
+            .auth-buttons {
+                gap: 10px;
+            }
+            .hero h1 { font-size: 44px; }
+            .hero p { font-size: 20px; }
+            .section-title { font-size: 32px; }
+            #contato .section-title,
+            #contato .section-subtitle {
+                text-align: center; /* Volta ao centro no mobile */
+                margin-left: auto;
+                margin-right: auto;
+            }
+             #contato .section-title::after {
+                margin: 15px auto 0; /* Centraliza o underline no mobile */
+            }
+            .contact-info p {
+                justify-content: center; /* Centraliza as informações de contato no mobile */
+            }
+        }
+
+
+        @media (max-width: 768px) { /* Mobile */
+            header {
+                flex-direction: column;
+                align-items: center; /* Center items when stacked */
+                gap: 15px; /* Gap between stacked groups */
+            }
+            .logo {
+                margin-bottom: 0; /* Removed default margin, handled by header gap */
+            }
+            .navbar-main-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                width: 100%;
+            }
+            .navbar-main-links a {
+                padding: 8px 0;
+            }
+            .auth-buttons {
+                width: 100%;
+                justify-content: center; /* Center buttons */
+                 margin-top: 0; /* Removed from original */
+            }
+            .auth-buttons .btn-auth {
+                flex-grow: 1; /* Allow buttons to grow */
+                max-width: 180px; /* But not too wide */
+            }
+
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 18px; }
+            .btn-cta { padding: 12px 28px; font-size: 16px; }
+
+            .section-title { font-size: 28px; }
+            .section-subtitle { font-size: 16px; margin-bottom: 30px; } /* Ajuste geral para mobile */
+            #contato .section-subtitle { margin-bottom: 25px; } /* Específico para contato mobile */
+            .cta-section .section-subtitle { margin-bottom: 25px; } /* Específico para CTA mobile */
+
+
             .features {
                 flex-direction: column;
                 align-items: center;
             }
-
-            .hero h1 {
-                font-size: 36px;
+            .feature {
+                max-width: 350px; /* Allow features to be a bit wider on mobile stack */
             }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .section h2 {
-                font-size: 28px;
-            }
-
-            .cta button {
-                padding: 12px 24px;
+            .contact-info p {
                 font-size: 16px;
+                flex-direction: column;
+                gap: 5px;
             }
+             .contact-info p .material-symbols-outlined { font-size: 24px; }
         }
 
     </style>
@@ -279,67 +469,72 @@
 <body>
 
 <header>
-    <a href="http://localhost:8080/" class="logo" style="text-decoration: none;">
-        <span class="material-symbols-outlined" style="font-size: 30px; margin-right: 8px;">construction</span>
-        <span style="font-size: 28px; font-weight: 700;">ShareTools</span>
+    <a href="http://localhost:8080/" class="logo">
+        <span class="material-symbols-outlined">construction</span>
+        ShareTools
     </a>
 
-
-    <nav class="navbar-links">
+    <nav class="navbar-main-links">
         <a href="#como-funciona">Como funciona</a>
         <a href="#beneficios">Benefícios</a>
         <a href="#contato">Contato</a>
     </nav>
     <div class="auth-buttons">
-        <button onclick="window.location.href='/users/login'">Login</button>
-        <button class="register" onclick="window.location.href='/users/register'">Registrar</button>
+        <button class="btn-auth" onclick="window.location.href='/users/login'">Login</button>
+        <button class="btn-auth register" onclick="window.location.href='/users/register'">Registrar</button>
     </div>
 </header>
 
 <section class="hero">
     <h1>COMPARTILHE FERRAMENTAS COM SEUS VIZINHOS</h1>
     <p>Economize dinheiro, reduza o desperdício e fortaleça sua comunidade.</p>
-    <button onclick="window.location.href='/users/register'">Comece agora</button>
+    <button class="btn-cta" onclick="window.location.href='/users/register'">Comece agora</button>
 </section>
 
 <section class="section" id="beneficios">
-    <h2>Benefícios do ShareTools</h2>
+    <h2 class="section-title">Benefícios do ShareTools</h2>
+    <p class="section-subtitle">Descubra as vantagens de fazer parte da nossa comunidade de compartilhamento.</p>
     <div class="features">
         <div class="feature">
-            <span class="material-symbols-outlined">handshake</span>
+            <div class="feature-icon"><span class="material-symbols-outlined">handshake</span></div>
             <h3>Colaboração</h3>
-            <p>Conecte-se com vizinhos e promova o espírito de comunidade.</p>
+            <p>Conecte-se com vizinhos e promova o espírito de comunidade, tornando seu bairro mais unido e prestativo.</p>
         </div>
         <div class="feature">
-            <span class="material-symbols-outlined">eco</span>
+            <div class="feature-icon"><span class="material-symbols-outlined">eco</span></div>
             <h3>Sustentabilidade</h3>
-            <p>Compartilhar ferramentas ajuda a reduzir o consumo e o lixo.</p>
+            <p>Compartilhar ferramentas ajuda a reduzir o consumo excessivo, o desperdício de recursos e o lixo gerado.</p>
         </div>
         <div class="feature">
-            <span class="material-symbols-outlined">attach_money</span>
+            <div class="feature-icon"><span class="material-symbols-outlined">attach_money</span></div>
             <h3>Economia</h3>
-            <p>Evite gastar com ferramentas que você só usaria uma vez.</p>
+            <p>Evite gastar com ferramentas que você usaria poucas vezes. Acesse o que precisa e economize seu dinheiro.</p>
         </div>
     </div>
 </section>
 
 <section class="section" id="como-funciona">
-    <h2>Como funciona?</h2>
-    <p class="mx-auto" style="max-width: 600px;">
-        Cadastre-se na plataforma, registre suas ferramentas e veja o que outros vizinhos disponibilizaram. Solicite empréstimos ou compartilhe seus itens com segurança.
+    <h2 class="section-title">Como funciona?</h2>
+    <p class="section-subtitle">
+        É simples e rápido! Cadastre-se na plataforma, registre as ferramentas que deseja compartilhar e explore os itens que seus vizinhos disponibilizaram. Você pode solicitar empréstimos ou compartilhar seus próprios itens com total segurança e praticidade.
     </p>
 </section>
 
-<section class="cta">
-    <h2>Pronto para começar?</h2>
-    <p>Leva menos de um minuto para se cadastrar. Participe dessa ideia!</p>
-    <button onclick="window.location.href='/users/register'">Cadastre-se</button>
+<section class="text-white py-5" style="background-color: #5E2B97;">
+    <div class="container text-center">
+        <h2 class="mb-4">Pronto para começar?</h2>
+        <p class="lead mb-4">Leva menos de um minuto para se cadastrar. Participe dessa ideia transformadora e colabore com sua comunidade!</p>
+        <a href="/cadastro" class="btn btn-warning btn-lg">Cadastre-se Gratuitamente</a>
+    </div>
 </section>
 
 <section id="contato">
-    <h2>Contato</h2>
-    <p><span class="material-symbols-outlined">mail</span> <a href="mailto:contato@sharetools.com">contato@sharetools.com</a></p>
-    <p><span class="material-symbols-outlined">call</span> (11) 99999-9999</p>
+    <h2 class="section-title">Entre em Contato</h2>
+    <p class="section-subtitle">Tem alguma dúvida ou sugestão? Adoraríamos ouvir você!</p>
+    <div class="contact-info">
+        <p><span class="material-symbols-outlined">mail</span> <a href="mailto:contato@sharetools.com">contato@sharetools.com</a></p>
+        <p><span class="material-symbols-outlined">call</span> (11) 91234-6780 </p>
+    </div>
 </section>
 
 <footer>
