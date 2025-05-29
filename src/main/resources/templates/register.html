@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar - ShareTools</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         body {
@@ -67,54 +67,158 @@
         .container {
             max-width: 480px;
             width: 90%;
-            margin: 60px auto;
+            margin: 60px auto 40px auto;
             background-color: #ffffff;
             padding: 40px 30px;
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(75, 31, 129, 0.15);
             color: #5E2B97;
             flex-grow: 1;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .container:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(75, 31, 129, 0.2);
         }
 
         h2 {
             text-align: center;
             color: #4B1F81;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #5E2B97;
         }
 
         input[type="text"],
         input[type="email"],
-        input[type="password"],
-        input[type="tel"] {
+        input[type="tel"] { /* Password handled by wrapper */
+            box-sizing: border-box;
             width: 100%;
             padding: 12px;
             margin-bottom: 18px;
-            border: 1px solid #8E44AD;
+            border: 1px solid #BCA0DC;
             border-radius: 10px;
             font-size: 15px;
             background-color: #f9f5fd;
-            transition: border-color 0.3s, background-color 0.3s;
+            color: #333;
+            box-shadow: 0 0 0px rgba(75, 31, 129, 0);
+            transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
         }
 
-        input:focus {
+        input[type="text"]:hover,
+        input[type="email"]:hover,
+        input[type="tel"]:hover {
+            border-color: #8E44AD;
+            background-color: #f7f0fc;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
             border-color: #4B1F81;
             background-color: #ffffff;
             outline: none;
+            box-shadow: 0 0 8px rgba(75, 31, 129, 0.3);
         }
 
-        button {
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            /* No margin-bottom here, password-strength-meter will have it */
+        }
+
+        .password-wrapper input[type="password"],
+        .password-wrapper input[type="text"] {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            padding-right: 45px; /* Space for the icon */
+            /* margin-bottom: 0; /* Strength meter provides margin below */
+            border: 1px solid #BCA0DC;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #f9f5fd;
+            color: #333;
+            box-shadow: 0 0 0px rgba(75, 31, 129, 0);
+            transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+        }
+        .password-wrapper input[type="password"]:hover,
+        .password-wrapper input[type="text"]:hover {
+            border-color: #8E44AD;
+            background-color: #f7f0fc;
+        }
+        .password-wrapper input[type="password"]:focus,
+        .password-wrapper input[type="text"]:focus {
+            border-color: #4B1F81;
+            background-color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(75, 31, 129, 0.3);
+        }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #757575;
+            user-select: none;
+            font-size: 22px;
+        }
+        .toggle-password:hover {
+            color: #4B1F81;
+        }
+
+        .password-strength-meter {
+            margin-top: 8px; /* Space below password input */
+            margin-bottom: 18px; /* Space before next element (button) */
+        }
+        #password-strength-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        #password-strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+        .strength-bar.none { background-color: transparent; width: 0%; }
+        .strength-bar.weak { background-color: #e74c3c; width: 25%; }
+        .strength-bar.medium { background-color: #f39c12; width: 50%; }
+        .strength-bar.strong { background-color: #2ecc71; width: 75%; }
+        .strength-bar.very-strong { background-color: #27ae60; width: 100%; }
+
+        #password-strength-text {
+            font-size: 0.85em;
+            font-weight: 500;
+            height: 1.2em; /* Reserve space */
+        }
+        .strength-text.none { color: #757575; }
+        .strength-text.weak { color: #e74c3c; }
+        .strength-text.medium { color: #f39c12; }
+        .strength-text.strong { color: #2ecc71; }
+        .strength-text.very-strong { color: #27ae60; }
+
+        .password-hint {
+            font-size: 0.8em;
+            color: #e74c3c; /* Red for warning if weak */
+            margin-top: 2px;
+            height: 1em;
+        }
+
+
+        button#registerButton { /* More specific selector */
+            box-sizing: border-box;
             width: 100%;
             padding: 14px;
             background: linear-gradient(to right, #4B1F81, #7D3C98);
@@ -124,18 +228,36 @@
             font-weight: 600;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s;
+            transition: background 0.3s ease, transform 0.2s, box-shadow 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 10px;
         }
 
-        button:hover {
+        button#registerButton:hover {
             background: linear-gradient(to right, #F1C40F, #F39C12);
             color: #4B1F81;
-            transform: scale(1.02);
+            transform: scale(1.02) translateY(-1px);
+            box-shadow: 0 4px 8px rgba(241, 196, 15, 0.4);
         }
+
+        button#registerButton:active {
+            transform: scale(0.98);
+            background: linear-gradient(to right, #e0b000, #e28800);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+
+        button#registerButton:disabled {
+            background: linear-gradient(to right, #a790c3, #bca0dc); /* Muted purple */
+            color: #d1c4e9; /* Lighter text */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
 
         .login-link {
             text-align: center;
-            margin-top: 16px;
+            margin-top: 20px;
             font-size: 14px;
             color: #5E2B97;
         }
@@ -143,6 +265,7 @@
         .login-link a {
             color: #8E44AD;
             text-decoration: none;
+            font-weight: 600;
             transition: color 0.3s;
         }
 
@@ -151,47 +274,36 @@
             text-decoration: underline;
         }
 
+        .form-error-message { /* For general Thymeleaf errors like email already exists */
+            color: #D32F2F;
+            margin-top: -10px;
+            margin-bottom: 12px;
+            font-size: 0.875em;
+            font-weight: 500;
+        }
+
+
         footer {
             background-color: #4B1F81;
             color: #ECF0F1;
             text-align: center;
-            padding: 14px 0;
+            padding: 16px 0;
             font-size: 14px;
             font-weight: 600;
             margin-top: auto;
             border-radius: 12px 12px 0 0;
         }
 
-        /* Responsividade */
         @media (max-width: 600px) {
-            header {
-                padding: 16px 20px;
-            }
-
-            .navbar-links a {
-                margin-left: 12px;
-                font-size: 14px;
-            }
-
-            .container {
-                margin: 40px auto;
-                padding: 25px 20px;
-            }
-
-            h2 {
-                font-size: 20px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 10px;
-            }
-
-            .login-link {
-                font-size: 13px;
-            }
+            header { padding: 16px 20px; }
+            .logo { font-size: 24px; }
+            .logo .material-symbols-outlined { font-size: 26px; }
+            .navbar-links a { margin-left: 12px; font-size: 14px; }
+            .container { margin: 40px auto 30px auto; padding: 30px 20px; }
+            h2 { font-size: 22px; }
+            button#registerButton { font-size: 15px; padding: 12px; }
+            .login-link { font-size: 13px; }
         }
-
     </style>
 </head>
 <body>
@@ -219,7 +331,7 @@
         <input type="email" id="email" th:field="*{email}" required
                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                title="Digite um e-mail válido (ex: usuario@dominio.com)">
-        <p th:if="${emailError}" th:text="${emailError}" style="color: red; margin-top: -12px; margin-bottom: 12px;"></p>
+        <p th:if="${emailError}" th:text="${emailError}" class="form-error-message"></p>
 
         <label for="phone">Telefone</label>
         <input type="tel" id="phone" th:field="*{phone}" required
@@ -227,13 +339,21 @@
                title="Formato esperado: (11) 91234-5678"
                placeholder="(11) 91234-5678">
 
-
         <label for="password">Senha</label>
-        <input type="password" id="password" th:field="*{password}" required
-               pattern=".{8,}"
-               title="A senha deve conter pelo menos 8 caracteres">
+        <div class="password-wrapper">
+            <input type="password" id="password" th:field="*{password}" required
+                   title="A senha deve ter no mínimo 8 caracteres e combinar letras, números e/ou símbolos para segurança média ou superior.">
+            <span class="material-symbols-outlined toggle-password" id="togglePassword">visibility</span>
+        </div>
+        <div id="password-strength-meter" class="password-strength-meter">
+            <div id="password-strength-bar-container">
+                <div id="password-strength-bar" class="strength-bar none"></div>
+            </div>
+            <p id="password-strength-text" class="strength-text none"></p>
+            <p id="password-submit-hint" class="password-hint"></p>
+        </div>
 
-        <button type="submit">Registrar</button>
+        <button type="submit" id="registerButton">Registrar</button>
     </form>
     <div class="login-link">
         Já possui uma conta? <a href="/login">Faça login</a>
@@ -245,26 +365,117 @@
 </footer>
 
 <script>
+    // Phone Input Mask
     const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').substring(0, 11);
+            let formatted = '';
+            const ddd = x.substring(0, 2);
+            const part1 = x.substring(2, x.length > 10 ? 7 : 6);
+            const part2 = x.substring(x.length > 10 ? 7 : 6);
 
-    phoneInput.addEventListener('input', function (e) {
-        let x = e.target.value.replace(/\D/g, '').substring(0, 11); // remove não números
-        let formatted = '';
+            if (x.length > 6) {
+                formatted = `(${ddd}) ${part1}-${part2}`;
+            } else if (x.length > 2) {
+                formatted = `(${ddd}) ${part1}`;
+            } else if (x.length > 0) {
+                formatted = `(${ddd}`;
+            }
+            e.target.value = formatted;
+        });
+    }
 
-        if (x.length > 10) {
-            formatted = `(${x.substring(0, 2)}) ${x.substring(2, 7)}-${x.substring(7)}`;
-        } else if (x.length > 6) {
-            formatted = `(${x.substring(0, 2)}) ${x.substring(2, 6)}-${x.substring(6)}`;
-        } else if (x.length > 2) {
-            formatted = `(${x.substring(0, 2)}) ${x.substring(2)}`;
-        } else if (x.length > 0) {
-            formatted = `(${x}`;
-        }
+    // Password Toggle Visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+        });
+    }
 
-        e.target.value = formatted;
-    });
+    // Password Strength Checker
+    const strengthBar = document.getElementById('password-strength-bar');
+    const strengthText = document.getElementById('password-strength-text');
+    const submitButton = document.getElementById('registerButton');
+    const passwordSubmitHint = document.getElementById('password-submit-hint');
+
+    if (passwordInput && strengthBar && strengthText && submitButton && passwordSubmitHint) {
+        passwordInput.addEventListener('input', function() {
+            const pass = passwordInput.value;
+            let score = 0;
+            let strengthLabel = 'Nenhuma';
+            let strengthClass = 'none';
+            let hintText = '';
+
+            if (pass.length > 0) { // Only start scoring if there's some input
+                if (pass.length >= 8) score++;
+                if (pass.length >= 10) score++; // Bonus for longer length contributing to higher tiers
+
+                let types = 0;
+                if (/[a-z]/.test(pass)) types++; // lowercase
+                if (/[A-Z]/.test(pass)) types++; // uppercase
+                if (/[0-9]/.test(pass)) types++; // numbers
+                if (/[^A-Za-z0-9]/.test(pass)) types++; // symbols
+
+                score += types; // Add count of character types
+
+                // Adjust scoring logic for more distinct levels
+                // Score can range from 0 (empty) up to potentially 2 (length) + 4 (types) = 6
+                if (pass.length < 8) { // Overrule if too short
+                    strengthLabel = 'Fraca';
+                    strengthClass = 'weak';
+                    score = 1; // Force weak if less than 8 chars
+                } else if (score <= 2) { // e.g. 8 chars + 1 type OR <8 chars but multiple types (overruled by above)
+                    strengthLabel = 'Fraca';
+                    strengthClass = 'weak';
+                } else if (score <= 4) { // e.g., 8 chars + 2-3 types, or 10 chars + 2 types
+                    strengthLabel = 'Média';
+                    strengthClass = 'medium';
+                } else if (score <= 5) { // e.g., 10 chars + 3 types, or 8 chars + 4 types
+                    strengthLabel = 'Forte';
+                    strengthClass = 'strong';
+                } else { // score >= 6 (e.g. 10+ chars and 4 types)
+                    strengthLabel = 'Muito Forte';
+                    strengthClass = 'very-strong';
+                }
+            } else { // Empty password
+                 strengthLabel = ''; // No text for empty
+                 strengthClass = 'none';
+                 score = 0;
+            }
+
+
+            strengthBar.className = 'strength-bar ' + strengthClass;
+            strengthText.textContent = strengthLabel;
+            strengthText.className = 'strength-text ' + strengthClass;
+
+            // Enable/Disable submit button
+            // Score for "Média" should effectively be 3 or more based on this refined logic
+            // Fraca: score 1 or 2
+            // Média: score 3 or 4
+            // Forte: score 5
+            // Muito Forte: score 6+
+            const isStrongEnough = score >= 3; // Minimum Medium strength
+            submitButton.disabled = !isStrongEnough;
+
+            if (!pass.length) {
+                passwordSubmitHint.textContent = '';
+            } else if (!isStrongEnough) {
+                passwordSubmitHint.textContent = 'Senha muito fraca. Tente combinar mais caracteres.';
+                passwordSubmitHint.style.color = '#e74c3c';
+            } else {
+                passwordSubmitHint.textContent = 'Força da senha: ' + strengthLabel;
+                 passwordSubmitHint.style.color = (strengthClass === 'medium') ? '#f39c12' : '#2ecc71';
+            }
+        });
+        // Initial check in case of pre-filled password (e.g. browser autocomplete)
+        passwordInput.dispatchEvent(new Event('input'));
+    }
 </script>
-
 
 </body>
 </html>

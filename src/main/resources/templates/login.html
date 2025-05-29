@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - ShareTools</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         body {
@@ -44,7 +44,7 @@
             align-items: center;
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff; /* Amarelo suave para destaque */
+            color: #ffffff;
             transition: color 0.3s ease;
         }
         .logo:hover {
@@ -73,46 +73,103 @@
             box-shadow: 0 8px 20px rgba(75, 31, 129, 0.15);
             color: #5E2B97;
             flex-grow: 1;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .container:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(75, 31, 129, 0.2);
         }
 
         h2 {
             text-align: center;
             color: #4B1F81;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #5E2B97;
         }
 
-        input[type="email"],
-        input[type="password"] {
+        input[type="email"] { /* Specific for email, password handled by wrapper */
+            box-sizing: border-box;
             width: 100%;
             padding: 12px;
-            margin-bottom: 18px;
-            border: 1px solid #8E44AD;
+            margin-bottom: 20px;
+            border: 1px solid #BCA0DC;
             border-radius: 10px;
             font-size: 15px;
             background-color: #f9f5fd;
-            transition: border-color 0.3s, background-color 0.3s;
+            color: #333;
+            box-shadow: 0 0 0px rgba(75, 31, 129, 0);
+            transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
         }
-
-        input[type="email"]:focus,
-        input[type="password"]:focus {
+        input[type="email"]:hover {
+            border-color: #8E44AD;
+            background-color: #f7f0fc;
+        }
+        input[type="email"]:focus {
             border-color: #4B1F81;
             background-color: #ffffff;
             outline: none;
+            box-shadow: 0 0 8px rgba(75, 31, 129, 0.3);
         }
 
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px; /* Original margin for password input */
+        }
+
+        .password-wrapper input[type="password"],
+        .password-wrapper input[type="text"] {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            padding-right: 45px; /* Space for the icon */
+            border: 1px solid #BCA0DC;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #f9f5fd;
+            color: #333;
+            box-shadow: 0 0 0px rgba(75, 31, 129, 0);
+            transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .password-wrapper input[type="password"]:hover,
+        .password-wrapper input[type="text"]:hover {
+            border-color: #8E44AD;
+            background-color: #f7f0fc;
+        }
+
+        .password-wrapper input[type="password"]:focus,
+        .password-wrapper input[type="text"]:focus {
+            border-color: #4B1F81;
+            background-color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(75, 31, 129, 0.3);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #757575;
+            user-select: none;
+            font-size: 22px;
+        }
+        .toggle-password:hover {
+            color: #4B1F81;
+        }
+
+
         button {
+            box-sizing: border-box;
             width: 100%;
             padding: 14px;
             background: linear-gradient(to right, #4B1F81, #7D3C98);
@@ -122,18 +179,27 @@
             font-weight: 600;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s;
+            transition: background 0.3s ease, transform 0.2s, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 10px; /* Space above button if error message is not shown */
         }
 
         button:hover {
             background: linear-gradient(to right, #F1C40F, #F39C12);
             color: #4B1F81;
-            transform: scale(1.02);
+            transform: scale(1.02) translateY(-1px);
+            box-shadow: 0 4px 8px rgba(241, 196, 15, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+            background: linear-gradient(to right, #e0b000, #e28800);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
         }
 
         .register-link {
             text-align: center;
-            margin-top: 16px;
+            margin-top: 20px;
             font-size: 14px;
             color: #5E2B97;
         }
@@ -141,6 +207,7 @@
         .register-link a {
             color: #8E44AD;
             text-decoration: none;
+            font-weight: 600;
             transition: color 0.3s;
         }
 
@@ -149,55 +216,40 @@
             text-decoration: underline;
         }
 
-        /* Mensagem de erro */
-        [th\\:if] {
-            color: red;
+        .form-error-message {
+            color: #D32F2F;
             text-align: center;
+            margin-top: 0; /* Adjusted to be directly after inputs or before button */
             margin-bottom: 15px;
+            font-size: 0.9em;
+            font-weight: 500;
+            background-color: #FFEBEE;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #FFCDD2;
         }
 
         footer {
             background-color: #4B1F81;
             color: #ECF0F1;
             text-align: center;
-            padding: 14px 0;
+            padding: 16px 0;
             font-size: 14px;
             font-weight: 600;
             margin-top: auto;
             border-radius: 12px 12px 0 0;
         }
 
-        /* Responsividade */
         @media (max-width: 600px) {
-            header {
-                padding: 16px 20px;
-            }
-
-            .navbar-links a {
-                margin-left: 12px;
-                font-size: 14px;
-            }
-
-            .container {
-                margin: 40px auto 30px auto;
-                padding: 25px 20px;
-            }
-
-            h2 {
-                font-size: 20px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 10px;
-            }
-
-            .register-link {
-                font-size: 13px;
-            }
+            header { padding: 16px 20px; }
+            .logo { font-size: 24px; }
+            .logo .material-symbols-outlined { font-size: 26px; }
+            .navbar-links a { margin-left: 12px; font-size: 14px; }
+            .container { margin: 40px auto 30px auto; padding: 30px 20px; }
+            h2 { font-size: 22px; }
+            button { font-size: 15px; padding: 12px; }
+            .register-link { font-size: 13px; }
         }
-
-
     </style>
 </head>
 <body>
@@ -220,15 +272,16 @@
         <input type="email" id="email" name="email" required>
 
         <label for="password">Senha</label>
-        <input type="password" id="password" name="password" required>
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" required>
+            <span class="material-symbols-outlined toggle-password" id="togglePassword">visibility</span>
+        </div>
 
-        <button type="submit">Login</button>
-
-        <!-- Exibe mensagem de erro quando login falhar -->
-        <div th:if="${param.error}" style="color: red; text-align: center; margin-bottom: 15px;">
+        <div th:if="${param.error}" class="form-error-message">
             Usuário ou senha inválidos.
         </div>
 
+        <button type="submit">Login</button>
     </form>
     <div class="register-link">
         Ainda não tem uma conta? <a href="/register">Cadastre-se</a>
@@ -238,6 +291,19 @@
 <footer>
     © 2025 ShareTools. Todos os direitos reservados.
 </footer>
+
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+        });
+    }
+</script>
 
 </body>
 </html>
