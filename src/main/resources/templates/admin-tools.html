@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Ferramentas - ShareTools</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+
+    <title>Gestão de ferramentas - ShareTools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -434,8 +436,8 @@
                 Menu Admin <span class="arrow">▼</span>
             </button>
             <div class="admin-menu-content" id="adminMenuContent">
-                <a href="/admin/users">Gestão de Usuários</a>
-                <a href="/admin/tools">Gestão de Ferramentas</a>
+                <a href="/admin/users">Gestão de usuários</a>
+                <a href="/admin/tools">Gestão de ferramentas</a>
                 <a href="/h2-console" target="_blank">H2 Console</a>
             </div>
         </div>
@@ -457,7 +459,7 @@
 </header>
 
 <main>
-    <h2>Gestão de Ferramentas</h2>
+    <h2>Gestão de ferramentas</h2>
 
     <div th:if="${error}" style="background-color: #f8d7da; color: #721c24; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
         <p th:text="${error}"></p>
@@ -468,10 +470,10 @@
     </div>
 
     <div class="filter-container">
-        <label for="toolSearch">Filtrar por Nome ou Descrição:</label>
+        <label for="toolSearch">Filtrar por nome ou descrição:</label>
         <input type="text" id="toolSearch" placeholder="Digite para buscar..." onkeyup="filterTools()">
 
-        <label for="ownerSearch">Filtrar por Proprietário:</label>
+        <label for="ownerSearch">Filtrar por proprietário:</label>
         <input type="text" id="ownerSearch" placeholder="Digite o nome do proprietário..." onkeyup="filterTools()">
     </div>
 
