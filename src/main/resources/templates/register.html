@@ -133,7 +133,6 @@
         .password-wrapper {
             position: relative;
             width: 100%;
-            /* No margin-bottom here, password-strength-meter will have it */
         }
 
         .password-wrapper input[type="password"],
@@ -141,8 +140,7 @@
             box-sizing: border-box;
             width: 100%;
             padding: 12px;
-            padding-right: 45px; /* Space for the icon */
-            /* margin-bottom: 0; /* Strength meter provides margin below */
+            padding-right: 45px;
             border: 1px solid #BCA0DC;
             border-radius: 10px;
             font-size: 15px;
@@ -179,7 +177,7 @@
 
         .password-strength-meter {
             margin-top: 8px; /* Space below password input */
-            margin-bottom: 18px; /* Space before next element (button) */
+            margin-bottom: 2px; /* MODIFIED: Reduzido ainda mais para aproximar do campo de confirmação */
         }
         #password-strength-bar-container {
             width: 100%;
@@ -204,7 +202,7 @@
         #password-strength-text {
             font-size: 0.85em;
             font-weight: 500;
-            height: 1.2em; /* Reserve space */
+            height: 1.2em;
         }
         .strength-text.none { color: #757575; }
         .strength-text.weak { color: #e74c3c; }
@@ -214,13 +212,20 @@
 
         .password-hint {
             font-size: 0.8em;
-            color: #e74c3c; /* Red for warning if weak */
             margin-top: 2px;
             height: 1em;
+            margin-bottom: 2px; /* MODIFIED: Reduzido para aproximar elementos */
+        }
+        #password-submit-hint {
+             color: #e74c3c;
+        }
+        #confirm-password-error {
+            color: #e74c3c;
+            margin-bottom: 18px; /* This specific margin-bottom might be overridden by .password-hint if not careful. Let's ensure .password-hint is the primary controller here or make this more specific if needed. The current CSS means .password-hint's 2px will apply. */
         }
 
 
-        button#registerButton { /* More specific selector */
+        button#registerButton {
             box-sizing: border-box;
             width: 100%;
             padding: 14px;
@@ -250,8 +255,8 @@
         }
 
         button#registerButton:disabled {
-            background: linear-gradient(to right, #a790c3, #bca0dc); /* Muted purple */
-            color: #d1c4e9; /* Lighter text */
+            background: linear-gradient(to right, #a790c3, #bca0dc);
+            color: #d1c4e9;
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
@@ -277,7 +282,7 @@
             text-decoration: underline;
         }
 
-        .form-error-message { /* For general Thymeleaf errors like email already exists */
+        .form-error-message {
             color: #D32F2F;
             margin-top: -10px;
             margin-bottom: 12px;
@@ -347,6 +352,7 @@
             <input type="password" id="password" th:field="*{password}" required
                    title="A senha deve ter no mínimo 8 caracteres e combinar letras, números e/ou símbolos para segurança média ou superior.">
             <span class="material-symbols-outlined toggle-password" id="togglePassword">visibility</span>
+
         </div>
         <div id="password-strength-meter" class="password-strength-meter">
             <div id="password-strength-bar-container">
@@ -355,6 +361,15 @@
             <p id="password-strength-text" class="strength-text none"></p>
             <p id="password-submit-hint" class="password-hint"></p>
         </div>
+
+        <label for="confirmPassword">Confirmar Senha</label>
+        <div class="password-wrapper">
+            <input type="password" id="confirmPassword" name="confirmPassword" required
+                   title="Repita a senha digitada acima.">
+            <span class="material-symbols-outlined toggle-password" id="toggleConfirmPassword">visibility</span>
+        </div>
+        <p id="confirm-password-error" class="password-hint"></p>
+
 
         <button type="submit" id="registerButton">Registrar</button>
     </form>
@@ -389,94 +404,146 @@
         });
     }
 
-    // Password Toggle Visibility
-    const togglePassword = document.getElementById('togglePassword');
+    // --- INÍCIO DA LÓGICA DE VISIBILIDADE SINCRONIZADA DE SENHA ---
     const passwordInput = document.getElementById('password');
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
-        });
+    const togglePassword = document.getElementById('togglePassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+    function synchronizedTogglePasswordVisibility() {
+        if (!passwordInput || !confirmPasswordInput) return; // Verificação de segurança
+
+        // Verifica o tipo atual de um dos campos (assumindo que estão sincronizados ou começando do mesmo estado)
+        const isCurrentlyPasswordType = passwordInput.getAttribute('type') === 'password';
+        const newType = isCurrentlyPasswordType ? 'text' : 'password';
+        const newIcon = isCurrentlyPasswordType ? 'visibility_off' : 'visibility';
+
+        // Aplica o novo tipo a ambos os campos de senha
+        passwordInput.setAttribute('type', newType);
+        confirmPasswordInput.setAttribute('type', newType);
+
+        // Atualiza o ícone de ambos os toggles
+        if (togglePassword) {
+            togglePassword.textContent = newIcon;
+        }
+        if (toggleConfirmPassword) {
+            toggleConfirmPassword.textContent = newIcon;
+        }
     }
 
-    // Password Strength Checker
+    // Adiciona o event listener ao primeiro ícone de toggle
+    if (togglePassword) {
+        togglePassword.addEventListener('click', synchronizedTogglePasswordVisibility);
+    }
+
+    // Adiciona o event listener ao segundo ícone de toggle (para o campo de confirmação)
+    if (toggleConfirmPassword) {
+        toggleConfirmPassword.addEventListener('click', synchronizedTogglePasswordVisibility);
+    }
+    // --- FIM DA LÓGICA DE VISIBILIDADE SINCRONIZADA DE SENHA ---
+
+
+    // Password Strength Checker & Confirmation
     const strengthBar = document.getElementById('password-strength-bar');
     const strengthText = document.getElementById('password-strength-text');
     const submitButton = document.getElementById('registerButton');
     const passwordSubmitHint = document.getElementById('password-submit-hint');
+    const confirmPasswordError = document.getElementById('confirm-password-error');
 
-    if (passwordInput && strengthBar && strengthText && submitButton && passwordSubmitHint) {
+    let isPasswordStrongEnough = false;
+    let doPasswordsMatch = false;
+
+    function updateSubmitButtonState() {
+        submitButton.disabled = !(isPasswordStrongEnough && doPasswordsMatch);
+    }
+
+    function checkPasswordConfirmation() {
+        if (confirmPasswordInput.value === '' && passwordInput.value === '') {
+            confirmPasswordError.textContent = '';
+            // Consideramos que senhas vazias "não coincidem" para fins de validação do botão,
+            // a menos que ambos os campos estejam vazios E a senha não seja obrigatória (o que não é o caso aqui).
+            // A força da senha já cuidará do caso de senha vazia.
+            doPasswordsMatch = (passwordInput.value === ''); // Só são "iguais" se ambas estiverem vazias
+        } else if (passwordInput.value === confirmPasswordInput.value) {
+            confirmPasswordError.textContent = '';
+            doPasswordsMatch = true;
+        } else {
+            confirmPasswordError.textContent = 'As senhas não coincidem.';
+            doPasswordsMatch = false;
+        }
+        updateSubmitButtonState();
+    }
+
+
+    if (passwordInput && strengthBar && strengthText && submitButton && passwordSubmitHint && confirmPasswordInput && confirmPasswordError) {
         passwordInput.addEventListener('input', function() {
             const pass = passwordInput.value;
             let score = 0;
             let strengthLabel = 'Nenhuma';
             let strengthClass = 'none';
-            let hintText = '';
 
-            if (pass.length > 0) { // Only start scoring if there's some input
+            if (pass.length > 0) {
                 if (pass.length >= 8) score++;
-                if (pass.length >= 10) score++; // Bonus for longer length contributing to higher tiers
+                if (pass.length >= 10) score++;
 
                 let types = 0;
-                if (/[a-z]/.test(pass)) types++; // lowercase
-                if (/[A-Z]/.test(pass)) types++; // uppercase
-                if (/[0-9]/.test(pass)) types++; // numbers
-                if (/[^A-Za-z0-9]/.test(pass)) types++; // symbols
+                if (/[a-z]/.test(pass)) types++;
+                if (/[A-Z]/.test(pass)) types++;
+                if (/[0-9]/.test(pass)) types++;
+                if (/[^A-Za-z0-9]/.test(pass)) types++;
 
-                score += types; // Add count of character types
+                score += types;
 
-                // Adjust scoring logic for more distinct levels
-                // Score can range from 0 (empty) up to potentially 2 (length) + 4 (types) = 6
-                if (pass.length < 8) { // Overrule if too short
+                if (pass.length < 8) {
                     strengthLabel = 'Fraca';
                     strengthClass = 'weak';
-                    score = 1; // Force weak if less than 8 chars
-                } else if (score <= 2) { // e.g. 8 chars + 1 type OR <8 chars but multiple types (overruled by above)
+                    score = 1;
+                } else if (score <= 2) {
                     strengthLabel = 'Fraca';
                     strengthClass = 'weak';
-                } else if (score <= 4) { // e.g., 8 chars + 2-3 types, or 10 chars + 2 types
+                } else if (score <= 4) {
                     strengthLabel = 'Média';
                     strengthClass = 'medium';
-                } else if (score <= 5) { // e.g., 10 chars + 3 types, or 8 chars + 4 types
+                } else if (score <= 5) {
                     strengthLabel = 'Forte';
                     strengthClass = 'strong';
-                } else { // score >= 6 (e.g. 10+ chars and 4 types)
+                } else {
                     strengthLabel = 'Muito Forte';
                     strengthClass = 'very-strong';
                 }
-            } else { // Empty password
-                 strengthLabel = ''; // No text for empty
+            } else {
+                 strengthLabel = '';
                  strengthClass = 'none';
                  score = 0;
             }
-
 
             strengthBar.className = 'strength-bar ' + strengthClass;
             strengthText.textContent = strengthLabel;
             strengthText.className = 'strength-text ' + strengthClass;
 
-            // Enable/Disable submit button
-            // Score for "Média" should effectively be 3 or more based on this refined logic
-            // Fraca: score 1 or 2
-            // Média: score 3 or 4
-            // Forte: score 5
-            // Muito Forte: score 6+
-            const isStrongEnough = score >= 3; // Minimum Medium strength
-            submitButton.disabled = !isStrongEnough;
+            isPasswordStrongEnough = score >= 3;
 
             if (!pass.length) {
                 passwordSubmitHint.textContent = '';
-            } else if (!isStrongEnough) {
+            } else if (!isPasswordStrongEnough) {
                 passwordSubmitHint.textContent = 'Senha muito fraca. Tente combinar mais caracteres.';
                 passwordSubmitHint.style.color = '#e74c3c';
             } else {
                 passwordSubmitHint.textContent = 'Força da senha: ' + strengthLabel;
-                 passwordSubmitHint.style.color = (strengthClass === 'medium') ? '#f39c12' : '#2ecc71';
+                passwordSubmitHint.style.color = (strengthClass === 'medium') ? '#f39c12' : '#2ecc71';
             }
+            checkPasswordConfirmation();
         });
-        // Initial check in case of pre-filled password (e.g. browser autocomplete)
+
+        confirmPasswordInput.addEventListener('input', checkPasswordConfirmation);
+
         passwordInput.dispatchEvent(new Event('input'));
+        if (confirmPasswordInput.value) {
+             checkPasswordConfirmation();
+        } else {
+            doPasswordsMatch = (passwordInput.value === '');
+            updateSubmitButtonState();
+        }
     }
 </script>
 
