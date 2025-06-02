@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+    <title th:text="${pageTitle ?: 'Dashboard'} + ' - ShareTools'">Dashboard - ShareTools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --roxo: #4B1F81;
+            --roxo-escuro: #36175E;
+            --amarelo: #F1C40F;
+            --amarelo-hover: #F39C12;
+            --cinza-claro: #f4f4f9;
+            --texto: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: var(--cinza-claro);
+            color: var(--texto);
+        }
+
+        header {
+            background-color: var(--roxo-escuro);
+            color: white;
+            padding: 16px 40px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            gap: 20px;
+        }
+
+        .header-left {
+            grid-column: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-center {
+            grid-column: 2;
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            white-space: nowrap;
+            justify-content: center;
+        }
+
+        .header-right {
+            grid-column: 3;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: flex-end;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo span {
+            margin-left: 8px;
+        }
+
+        .user-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .user-icon span {
+            font-size: 1rem;
+            color: white;
+        }
+
+        .user-icon::before {
+            content: "👤";
+            font-size: 1.5rem;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            right: 0;
+            top: 60px;
+            background-color: white;
+            color: var(--texto);
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--texto);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .user-dropdown a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .admin-menu-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-menu-button {
+            background-color: var(--amarelo);
+            color: var(--roxo-escuro);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .admin-menu-button:hover {
+            background-color: var(--amarelo-hover);
+        }
+
+        .admin-menu-button .arrow {
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .admin-menu-dropdown.open .admin-menu-button .arrow {
+            transform: rotate(180deg);
+        }
+
+        .admin-menu-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            color: var(--texto);
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            z-index: 1000;
+            margin-top: 8px;
+            padding: 8px 0;
+            border: 1px solid #e0e0e0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .admin-menu-content.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .admin-menu-content a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--texto);
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .admin-menu-content a:hover {
+            background-color: var(--cinza-claro);
+            color: var(--roxo);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--roxo-escuro);
+            font-size: 2rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 60vh; /* Ajuste a altura conforme necessário */
+            max-height: 500px; /* Altura máxima */
+            width: 90%; /* Largura relativa */
+            max-width: 800px; /* Largura máxima */
+            margin: 20px auto; /* Centralizar */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .no-data-message {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            padding: 20px;
+        }
+
+
+        @media (max-width: 768px) {
+            header {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                padding: 16px 20px;
+                gap: 15px;
+            }
+            .header-left, .header-right, .header-center {
+                grid-column: 1;
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
+            .admin-menu-content {
+                min-width: 180px;
+            }
+            .chart-container {
+                width: 100%;
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <div class="admin-menu-dropdown" id="adminMenuDropdownContainer">
+            <button class="admin-menu-button" id="adminMenuButton">
+                Menu Admin <span class="arrow">▼</span>
+            </button>
+            <div class="admin-menu-content" id="adminMenuContent">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/users">Gestão de usuários</a>
+                <a href="/admin/tools">Gestão de ferramentas</a>
+                <a href="/h2-console" target="_blank">H2 Console</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo header-center">
+        <span>📊</span> <span th:text="'Admin - ' + ${pageTitle ?: 'ShareTools'}">Admin - ShareTools</span>
+    </div>
+
+    <div class="header-right">
+        <div class="user-icon" id="userIcon">
+            <span th:text="'Admin'">Admin</span>
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+            <a href="/users/logout">Sair</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h2 th:text="${pageTitle ?: 'Dashboard Administrativo'}">Dashboard Administrativo</h2>
+
+    <div th:if="${#lists.isEmpty(userToolCounts)}" class="no-data-message">
+        <p>Não há dados suficientes para exibir o gráfico de ferramentas por usuário.</p>
+        <p>Verifique se existem usuários e ferramentas cadastradas.</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(userToolCounts)}" class="chart-container">
+        <canvas id="userToolsChart"></canvas>
+    </div>
+</main>
+
+<script th:inline="javascript">
+    // Lógica do dropdown de usuário (copiada da sua página admin-tools)
+    const userIcon = document.getElementById('userIcon');
+    const userDropdown = document.getElementById('userDropdown');
+    let hideTimeout;
+
+    function showDropdown() {
+        clearTimeout(hideTimeout);
+        if (userDropdown) {
+             userDropdown.classList.add('show');
+        }
+    }
+
+    function hideDropdownWithDelay() {
+        hideTimeout = setTimeout(() => {
+            if (userDropdown) {
+                userDropdown.classList.remove('show');
+            }
+        }, 300);
+    }
+
+    if (userIcon && userDropdown) {
+        userIcon.addEventListener('mouseenter', showDropdown);
+        userIcon.addEventListener('mouseleave', hideDropdownWithDelay);
+        userDropdown.addEventListener('mouseenter', showDropdown);
+        userDropdown.addEventListener('mouseleave', hideDropdownWithDelay);
+    }
+
+    // Admin Menu Dropdown Logic (copiada da sua página admin-tools)
+    const adminMenuDropdownContainer = document.getElementById('adminMenuDropdownContainer');
+    const adminMenuButton = document.getElementById('adminMenuButton');
+    const adminMenuContent = document.getElementById('adminMenuContent');
+
+    if (adminMenuButton && adminMenuContent && adminMenuDropdownContainer) {
+        adminMenuButton.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const isOpen = adminMenuContent.classList.contains('show');
+            adminMenuContent.classList.toggle('show');
+            adminMenuDropdownContainer.classList.toggle('open', !isOpen);
+        });
+
+        window.addEventListener('click', function(event) {
+            if (adminMenuButton && adminMenuContent && adminMenuDropdownContainer &&
+                !adminMenuButton.contains(event.target) &&
+                !adminMenuContent.contains(event.target)) {
+                if (adminMenuContent.classList.contains('show')) {
+                    adminMenuContent.classList.remove('show');
+                    adminMenuDropdownContainer.classList.remove('open');
+                }
+            }
+        });
+    }
+
+    // Lógica do Gráfico
+    document.addEventListener('DOMContentLoaded', () => {
+        /*<![CDATA[*/
+        const userToolCountsData = /*[[${userToolCounts}]]*/ [];
+        /*]]>*/
+
+        if (userToolCountsData && userToolCountsData.length > 0) {
+            const labels = userToolCountsData.map(item => item.userName);
+            const data = userToolCountsData.map(item => item.toolCount);
+
+            const ctx = document.getElementById('userToolsChart');
+            if (ctx) {
+                 ctx.getContext('2d');
+                 new Chart(ctx, {
+                    type: 'bar', // Tipo de gráfico: barra
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Quantidade de Ferramentas',
+                            data: data,
+                            backgroundColor: 'rgba(75, 31, 129, 0.7)', // Cor --roxo com opacidade
+                            borderColor: 'rgba(75, 31, 129, 1)', // Cor --roxo
+                            borderWidth: 1,
+                            hoverBackgroundColor: 'rgba(54, 23, 94, 0.9)' // Cor --roxo-escuro com opacidade
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1, // Para garantir que a escala Y seja de inteiros
+                                    color: '#333' // Cor do texto dos ticks
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.05)' // Linhas de grade mais sutis
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#333'
+                                },
+                                grid: {
+                                    display: false // Ocultar grade vertical para um visual mais limpo
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true, // Pode ser false se o título do gráfico for suficiente
+                                position: 'top',
+                                labels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Ferramentas por Usuário',
+                                color: '#36175E', // --roxo-escuro
+                                font: {
+                                    size: 18,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        } else {
+            console.log("Nenhum dado para exibir no gráfico.");
+        }
+    });
+</script>
+
+</body>
+</html>
